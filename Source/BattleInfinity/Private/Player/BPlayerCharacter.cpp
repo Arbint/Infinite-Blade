@@ -22,7 +22,16 @@ void ABPlayerCharacter::PawnClientRestart()
 	APlayerController* OwningPlayerController = GetController<APlayerController>();
 	if (OwningPlayerController)
 	{
-UEnhancedInputLocalPlayerSubsystem* EnhancedSubsystem =
-OwningPlayerController->GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+		UEnhancedInputLocalPlayerSubsystem* EnhancedSubsystem =
+		OwningPlayerController->GetLocalPlayer()->GetSubsystem<UEnhancedInputLocalPlayerSubsystem>();
+		EnhancedSubsystem->RemoveMappingContext(GameplayInputMappingContext);
+		EnhancedSubsystem->AddMappingContext(GameplayInputMappingContext, 0);
 	}
 }
+
+void ABPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+		
+}
+

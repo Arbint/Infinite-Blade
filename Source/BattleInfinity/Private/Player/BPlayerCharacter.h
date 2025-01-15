@@ -16,10 +16,17 @@ class ABPlayerCharacter : public ABCharacter
 public:
 	ABPlayerCharacter();
 	virtual void PawnClientRestart() override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:	
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class UCameraComponent* ViewCam;
 
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class USpringArmComponent* CameraBoom;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputAction* JumpInputAction;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	class UInputMappingContext* GameplayInputMappingContext;
 };
