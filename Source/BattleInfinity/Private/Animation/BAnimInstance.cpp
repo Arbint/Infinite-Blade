@@ -26,6 +26,7 @@ void UBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		FRotator BodyRotation = OwnerCharacter->GetActorRotation();
 		FRotator RotationDelta = UKismetMathLibrary::NormalizedDeltaRotator(BodyRotation, PrevBodyRotation);
 		
+		PrevBodyRotation = BodyRotation;
 		YawSpeed = RotationDelta.Yaw / DeltaSeconds;
 
 		SmoothedYawSpeed = UKismetMathLibrary::FInterpTo(SmoothedYawSpeed, YawSpeed, DeltaSeconds, YawSpeedSmoothRate);
