@@ -4,6 +4,7 @@
 #include "Animation/BAnimInstance.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UBAnimInstance::NativeInitializeAnimation()
 {
@@ -21,5 +22,12 @@ void UBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	if (OwnerCharacter)
 	{
 		Speed = OwnerCharacter->GetVelocity().Length();
+
+		FRotator BodyRotation = OwnerCharacter->GetActorRotation();
+		FRotator RotationDelta = UKismetMathLibrary::NormalizedDeltaRotator(BodyRotation, PrevBodyRotation);
+		
+		YawSpeed = RotationDelta.Yaw / DeltaSeconds;
+
+		SmoothedYawSpeed = UKismetMathLibrary::FInterpTo(SmoothedYawSpeed, YawSpeed, DeltaSeconds, YawSpeedSmoothRate);
 	}
 }
