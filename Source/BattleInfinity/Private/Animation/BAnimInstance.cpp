@@ -30,5 +30,13 @@ void UBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		YawSpeed = RotationDelta.Yaw / DeltaSeconds;
 
 		SmoothedYawSpeed = UKismetMathLibrary::FInterpTo(SmoothedYawSpeed, YawSpeed, DeltaSeconds, YawSpeedSmoothRate);
+
+		FRotator AimRotation = OwnerCharacter->GetBaseAimRotation();
+		LookRotationDelta = UKismetMathLibrary::NormalizedDeltaRotator(AimRotation, BodyRotation);
+	}
+
+	if (OwnerCharacterMovementComponent)
+	{
+		bIsFalling = OwnerCharacterMovementComponent->IsFalling();
 	}
 }

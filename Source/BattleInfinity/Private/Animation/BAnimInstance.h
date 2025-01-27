@@ -30,6 +30,18 @@ public:
 	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
 	float GetSmoothedYawSpeed() const { return SmoothedYawSpeed; }
 
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	bool GetIsFalling() const { return bIsFalling; }
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	bool GetIsOnGround() const { return !bIsFalling; }
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	float GetLookYaw() const { return LookRotationDelta.Yaw; }
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	float GetLookPitch() const { return LookRotationDelta.Pitch; }
+
 private:
 	UPROPERTY()
 	class ACharacter* OwnerCharacter;
@@ -41,9 +53,11 @@ private:
 
 	float YawSpeed;
 	float SmoothedYawSpeed;
+	bool bIsFalling;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	float YawSpeedSmoothRate = 7.f;
 
 	FRotator PrevBodyRotation;
+	FRotator LookRotationDelta;
 };
