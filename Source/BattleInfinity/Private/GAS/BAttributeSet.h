@@ -29,4 +29,17 @@ private:
 	
 	UFUNCTION()
 	void OnRep_MaxHealth(const FGameplayAttributeData& OldValue);
+
+	UPROPERTY(ReplicatedUsing = OnRep_Mana)
+	FGameplayAttributeData Mana;
+
+	UPROPERTY(ReplicatedUsing = OnRep_MaxMana)
+	FGameplayAttributeData MaxMana;
+
+	UFUNCTION()
+	void OnRep_Mana(const FGameplayAttributeData& OldValue);
+	
+	UFUNCTION()
+	void OnRep_MaxMana(const FGameplayAttributeData& OldValue);
+
 };
