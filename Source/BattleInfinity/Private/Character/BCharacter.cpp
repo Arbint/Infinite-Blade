@@ -3,6 +3,8 @@
 
 #include "Character/BCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "GAS/BAbilitySystemComponent.h"
+#include "GAS/BAttributeSet.h"
 
 // Sets default values
 ABCharacter::ABCharacter()
@@ -31,5 +33,10 @@ void ABCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+UAbilitySystemComponent* ABCharacter::GetAbilitySystemComponent() const
+{
+	return BAbilitySystemComponent;
 }
 

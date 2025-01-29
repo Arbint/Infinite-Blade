@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "AbilitySystemInterface.h"
 #include "BCharacter.generated.h"
 
 UCLASS()
-class ABCharacter : public ACharacter
+class ABCharacter : public ACharacter, public IAbilitySystemInterface
 {
 	GENERATED_BODY()
 
@@ -27,4 +28,15 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	/************************************************/
+	/*              Gameplay Ability                */
+	/************************************************/
+public:
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category = "GameplayAbility")
+	class UBAbilitySystemComponent* BAbilitySystemComponent;
+
+	UPROPERTY()
+	class UBAttributeSet* BAttributeSet;
 };
