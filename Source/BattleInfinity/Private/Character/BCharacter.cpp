@@ -15,6 +15,23 @@ ABCharacter::ABCharacter()
 	BAttributeSet = CreateDefaultSubobject<UBAttributeSet>("BAttributeSet");
 }
 
+void ABCharacter::ServerSideInit()
+{
+	if (BAbilitySystemComponent)
+	{
+		BAbilitySystemComponent->InitAbilityActorInfo(this, this);
+		BAbilitySystemComponent->ApplyInitialEffects();
+	}
+}
+
+void ABCharacter::ClientSideInit()
+{
+	if (BAbilitySystemComponent)
+	{
+		BAbilitySystemComponent->InitAbilityActorInfo(this, this);
+	}
+}
+
 // Called when the game starts or when spawned
 void ABCharacter::BeginPlay()
 {

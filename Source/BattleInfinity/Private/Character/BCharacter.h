@@ -16,6 +16,9 @@ public:
 	// Sets default values for this character's properties
 	ABCharacter();
 
+	void ServerSideInit();
+	void ClientSideInit();
+
 protected:
 	// Called when the game starts or when spawned
 
