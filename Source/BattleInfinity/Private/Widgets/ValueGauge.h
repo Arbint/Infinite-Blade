@@ -7,7 +7,9 @@
 #include "ValueGauge.generated.h"
 
 struct FGameplayAttribute;
+struct FOnAttributeChangeData;
 /**
+
  * 
  */
 UCLASS()
@@ -32,4 +34,10 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Value Gauge")
 	FLinearColor ProgressBarFillColor = FColor::Green;
+
+	void ValueChanged(const FOnAttributeChangeData& ChangedData);
+	void MaxValueChanged(const FOnAttributeChangeData& ChangedData);
+
+	float CachedValue;
+	float CachedMaxValue;
 };

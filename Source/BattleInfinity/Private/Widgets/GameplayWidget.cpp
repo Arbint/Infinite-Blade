@@ -16,7 +16,12 @@ void UGameplayWidget::NativeConstruct()
 
 	if (OwnerAbilitySystemComponent)
 	{
-		HealthBar->InitializeWithAbilitySystem(OwnerAbilitySystemComponent, UBAttributeSet::GetHealthAttribute(), UBAttributeSet::GetMaxHealthAttribute());
-		ManaBar->InitializeWithAbilitySystem(OwnerAbilitySystemComponent, UBAttributeSet::GetManaAttribute(), UBAttributeSet::GetMaxManaAttribute());
+		HealthBar->InitializeWithAbilitySystem(OwnerAbilitySystemComponent, 
+			UBAttributeSet::GetHealthAttribute(),
+			UBAttributeSet::GetMaxHealthAttribute());
+
+		ManaBar->InitializeWithAbilitySystem(OwnerAbilitySystemComponent,
+			UBAttributeSet::GetManaAttribute(),
+			UBAttributeSet::GetMaxManaAttribute());
 	}
 }

@@ -29,10 +29,16 @@ void UValueGauge::InitializeWithAbilitySystem(UAbilitySystemComponent* AbilitySy
 	{
 		SetValue(NewValue, NewMaxValue);
 	}
+
+
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ValueAttribute).AddUObject(this, &UValueGauge::ValueChanged);
+	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MaxValueAttribute).AddUObject(this, &UValueGauge::MaxValueChanged);
 }
 
 void UValueGauge::SetValue(float NewValue, float NewMaxValue)
 {
+	CachedValue = NewValue;
+	CachedMaxValue = NewMaxValue;
 	if (NewMaxValue == 0)
 		return;
 	
@@ -50,4 +56,14 @@ void UValueGauge::SetValue(float NewValue, float NewMaxValue)
 			FText::AsNumber(NewMaxValue, &FormatingOptions)
 		)
 	);
+}
+
+void UValueGauge::ValueChanged(const FOnAttributeChangeData& ChangedData)
+{
+	SetValue(ChangedData.NewValue, CachedMaxValue);
+}
+
+void UValueGauge::MaxValueChanged(const FOnAttributeChangeData& ChangedData)
+{
+	SetValue(CachedValue, ChangedData.NewValue);
 }
