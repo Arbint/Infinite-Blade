@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "ValueGauge.generated.h"
 
+struct FGameplayAttribute;
 /**
  * 
  */
@@ -15,7 +16,14 @@ class UValueGauge : public UUserWidget
 	GENERATED_BODY()
 public:
 	virtual void NativePreConstruct() override;
+	void InitializeWithAbilitySystem(
+		class UAbilitySystemComponent* AbilitySystemComponent, 
+		const FGameplayAttribute& ValueAttribute, 
+		const FGameplayAttribute& MaxValueAttribute);
+
 private:	
+	void SetValue(float NewValue, float NewMaxValue);
+
 	UPROPERTY(meta=(BindWidget))
 	class UProgressBar* ProgressBar;
 
