@@ -3,6 +3,7 @@
 
 #include "Player/BPlayerController.h"
 #include "Player/BPlayerCharacter.h"
+#include "Widgets/GameplayWidget.h"
 
 void ABPlayerController::OnPossess(APawn* NewPawn)
 {
@@ -21,5 +22,21 @@ void ABPlayerController::AcknowledgePossession(APawn* NewPawn)
 	if (BPlayerCharacter)
 	{
 		BPlayerCharacter->ClientSideInit();
+	}
+	CreateGameplayWidget();
+}
+
+void ABPlayerController::CreateGameplayWidget()
+{
+	if (!IsLocalPlayerController())
+		return;
+
+	if (!GameplayWidgetClass)
+		return;
+
+	GameplayWidget = CreateWidget<UGameplayWidget>(this, GameplayWidgetClass);
+	if (GameplayWidget)
+	{
+		GameplayWidget->AddToViewport();
 	}
 }
