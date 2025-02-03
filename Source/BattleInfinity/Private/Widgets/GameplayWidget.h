@@ -13,5 +13,10 @@ UCLASS()
 class UGameplayWidget : public UUserWidget
 {
 	GENERATED_BODY()
-	
+private:	
+	UPROPERTY(meta=(BindWidget))
+	class UValueGauge* HealthBar;
+
+	UPROPERTY(meta=(BindWidget))
+	class UValueGauge* ManaBar;
 };
