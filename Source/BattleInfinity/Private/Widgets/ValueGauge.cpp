@@ -30,7 +30,6 @@ void UValueGauge::InitializeWithAbilitySystem(UAbilitySystemComponent* AbilitySy
 		SetValue(NewValue, NewMaxValue);
 	}
 
-
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(ValueAttribute).AddUObject(this, &UValueGauge::ValueChanged);
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(MaxValueAttribute).AddUObject(this, &UValueGauge::MaxValueChanged);
 }
