@@ -42,4 +42,12 @@ private:
 
 	UPROPERTY()
 	class UBAttributeSet* BAttributeSet;
+	/************************************************/
+	/*                   Widgets                    */
+	/************************************************/
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category="Widget")
+	class UWidgetComponent* OverheadWidgetComponent;
+
+	void ConfigureOverheadWidget();
 };

@@ -3,6 +3,7 @@
 
 #include "Character/BCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/WidgetComponent.h"
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
 
@@ -13,6 +14,9 @@ ABCharacter::ABCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	BAbilitySystemComponent = CreateDefaultSubobject<UBAbilitySystemComponent>("BAbilitySystemComponent");
 	BAttributeSet = CreateDefaultSubobject<UBAttributeSet>("BAttributeSet");
+
+	OverheadWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget Component");
+	OverheadWidgetComponent->SetupAttachment(GetRootComponent());
 }
 
 void ABCharacter::ServerSideInit()
@@ -36,7 +40,7 @@ void ABCharacter::ClientSideInit()
 void ABCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	ConfigureOverheadWidget();
 }
 
 // Called every frame
@@ -56,5 +60,10 @@ void ABCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 UAbilitySystemComponent* ABCharacter::GetAbilitySystemComponent() const
 {
 	return BAbilitySystemComponent;
+}
+
+void ABCharacter::ConfigureOverheadWidget()
+{
+		
 }
 
