@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Character/BCharacter.h"
+#include "GAS/BAbilitySystemTypes.h"
 #include "BPlayerCharacter.generated.h"
 
 /**
@@ -24,6 +25,15 @@ private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class USpringArmComponent* CameraBoom;
 
+	FVector GetLookRightDirection() const;
+
+	FVector GetLookForwardDirection() const;
+
+	FVector GetMoveForwardDirection() const;
+	/*********************************************/	
+	/*                Input                      */
+	/*********************************************/	
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputAction* JumpInputAction;
 
@@ -34,14 +44,13 @@ private:
 	class UInputAction* MoveInputAction;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TMap<EBAbilityInputID, class UInputAction*> AbilityInputActions;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	class UInputMappingContext* GameplayInputMappingContext;
 
 	void HandleLookInput(const struct FInputActionValue& InputActionValue);
 	void HandleMoveInput(const struct FInputActionValue& InputActionValue);
+	void HandleAbilityInput(const struct FInputActionValue& InputActionValue, EBAbilityInputID InputID);
 
-	FVector GetLookRightDirection() const;
-
-	FVector GetLookForwardDirection() const;
-
-	FVector GetMoveForwardDirection() const;
 };

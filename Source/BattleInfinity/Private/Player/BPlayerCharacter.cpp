@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AbilitySystemComponent.h"
 
 ABPlayerCharacter::ABPlayerCharacter()
 {
@@ -45,6 +46,11 @@ void ABPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Triggered, this, &ABPlayerCharacter::Jump);
 		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ABPlayerCharacter::HandleLookInput);
 		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &ABPlayerCharacter::HandleMoveInput);
+
+		for (const TPair<EBAbilityInputID, UInputAction*>& AbilityInputPair : AbilityInputActions)
+		{
+			EnhancedInputComponent->BindAction(AbilityInputPair.Value, ETriggerEvent::Triggered, this, &ABPlayerCharacter::HandleAbilityInput, AbilityInputPair.Key);
+		}
 	}
 }
 
@@ -65,6 +71,19 @@ void ABPlayerCharacter::HandleMoveInput(const FInputActionValue& InputActionValu
 	InputValue.Normalize();
 
 	AddMovementInput(GetLookRightDirection() * InputValue.X + GetMoveForwardDirection() * InputValue.Y);
+}
+
+void ABPlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionValue, EBAbilityInputID InputID)
+{
+	bool bIsPressed = InputActionValue.Get<bool>();
+	if (bIsPressed)
+	{
+		GetAbilitySystemComponent()->AbilityLocalInputPressed((int32)InputID);
+	}
+	else
+	{
+		GetAbilitySystemComponent()->AbilityLocalInputReleased((int32)InputID);
+	}
 }
 
 FVector ABPlayerCharacter::GetLookRightDirection() const
