@@ -14,3 +14,19 @@ void UBAbilitySystemComponent::ApplyInitialEffects()
 		ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
 	}
 }
+
+void UBAbilitySystemComponent::GrantInitialAbilities()
+{
+	if (!GetOwner() || !GetOwner()->HasAuthority())
+		return;
+
+	for (const TSubclassOf<UGameplayAbility>& AbilityClass : Abilities)
+	{
+		GiveAbility(FGameplayAbilitySpec(AbilityClass, 0, -1));
+	}
+
+	for (const TSubclassOf<UGameplayAbility>& AbilityClass : BasicAbilities)
+	{
+		GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, -1));
+	}
+}

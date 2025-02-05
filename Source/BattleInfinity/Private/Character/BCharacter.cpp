@@ -6,6 +6,7 @@
 #include "Components/WidgetComponent.h"
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
+#include "Widgets/OverheadStatWidget.h"
 
 // Sets default values
 ABCharacter::ABCharacter()
@@ -25,6 +26,7 @@ void ABCharacter::ServerSideInit()
 	{
 		BAbilitySystemComponent->InitAbilityActorInfo(this, this);
 		BAbilitySystemComponent->ApplyInitialEffects();
+		BAbilitySystemComponent->GrantInitialAbilities();
 	}
 }
 
@@ -64,6 +66,20 @@ UAbilitySystemComponent* ABCharacter::GetAbilitySystemComponent() const
 
 void ABCharacter::ConfigureOverheadWidget()
 {
-		
+	if (!OverheadWidgetComponent)
+		return;
+
+	if (GetController() && GetController()->IsLocalPlayerController())
+	{
+		OverheadWidgetComponent->SetHiddenInGame(true);
+		return;
+	}
+
+	UOverheadStatWidget* OverheadStatWidget = Cast<UOverheadStatWidget>(OverheadWidgetComponent->GetUserWidgetObject());
+	if (OverheadStatWidget)
+	{
+		OverheadStatWidget->InitializeWithAbilitySystemComponent(GetAbilitySystemComponent());
+		OverheadWidgetComponent->SetHiddenInGame(false);
+	}
 }
 
