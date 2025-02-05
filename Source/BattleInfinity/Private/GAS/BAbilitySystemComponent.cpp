@@ -20,13 +20,13 @@ void UBAbilitySystemComponent::GrantInitialAbilities()
 	if (!GetOwner() || !GetOwner()->HasAuthority())
 		return;
 
-	for (const TSubclassOf<UGameplayAbility>& AbilityClass : Abilities)
+	for (const TPair<EBAbilityInputID, TSubclassOf<UGameplayAbility>>& AbilityPair : Abilities)
 	{
-		GiveAbility(FGameplayAbilitySpec(AbilityClass, 0, -1));
+		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 0, (int32)AbilityPair.Key));
 	}
 
-	for (const TSubclassOf<UGameplayAbility>& AbilityClass : BasicAbilities)
+	for (const TPair<EBAbilityInputID,TSubclassOf<UGameplayAbility>>& AbilityPair: BasicAbilities)
 	{
-		GiveAbility(FGameplayAbilitySpec(AbilityClass, 1, -1));
+		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 1, (int32)AbilityPair.Key));
 	}
 }
