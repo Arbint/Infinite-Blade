@@ -15,4 +15,7 @@ class UBGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 public:			
 	UBGameplayAbility();
+
+protected:
+	UAnimInstance* GetOwnerAnimInstance() const;
 };

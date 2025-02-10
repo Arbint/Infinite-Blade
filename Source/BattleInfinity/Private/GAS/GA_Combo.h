@@ -15,8 +15,17 @@ class UGA_Combo : public UBGameplayAbility
 	GENERATED_BODY()
 public:	
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+	static FGameplayTag GetComboChangeTag();
+	static FGameplayTag GetComboEndTag();
 
 private:
+	void BindInputPressDelegate();
+
+	UFUNCTION()
+	void HandleComboInputPress(float TimeWaited);
+
+	void TryCommitNextCombo();
+
 	UPROPERTY(EditDefaultsOnly, Category="Animation")
 	UAnimMontage* ComboMontage;
 
