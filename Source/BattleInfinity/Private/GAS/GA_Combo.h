@@ -19,4 +19,9 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category="Animation")
 	UAnimMontage* ComboMontage;
+
+	UFUNCTION()
+	void HandleComboChange(FGameplayEventData Payload);
+
+	FName NextComboName;
 };
