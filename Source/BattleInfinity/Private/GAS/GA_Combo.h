@@ -28,6 +28,9 @@ private:
 	void TryCommitNextCombo();
 
 	UPROPERTY(EditDefaultsOnly, Category="GameplayEffect")
+	TMap<FName, TSubclassOf<UGameplayEffect>> ComboEffectsMap;
+
+	UPROPERTY(EditDefaultsOnly, Category="GameplayEffect")
 	TSubclassOf<UGameplayEffect> DefaultDamageEffect;
 
 	UPROPERTY(EditDefaultsOnly, Category="Animation")

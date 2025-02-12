@@ -110,8 +110,15 @@ void UGA_Combo::HandleDamageEvent(FGameplayEventData Payload)
 {
 	if (K2_HasAuthority())
 	{
+		FName CurrentComboName = GetOwnerAnimInstance()->Montage_GetCurrentSection(ComboMontage);
+		TSubclassOf<UGameplayEffect> DamageEffectClass = DefaultDamageEffect;
+
+		TSubclassOf<UGameplayEffect>* GameplayEffectClassPtr = ComboEffectsMap.Find(CurrentComboName);
+		if (GameplayEffectClassPtr)
+			DamageEffectClass = *GameplayEffectClassPtr;
+
 		FGameplayEffectSpecHandle DamageEffectSpecHandle =
-			MakeOutgoingGameplayEffectSpec(DefaultDamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
+			MakeOutgoingGameplayEffectSpec(DamageEffectClass, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
 		K2_ApplyGameplayEffectSpecToTarget(DamageEffectSpecHandle, Payload.TargetData);
 	}
 }

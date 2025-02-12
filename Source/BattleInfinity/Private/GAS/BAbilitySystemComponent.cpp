@@ -27,6 +27,6 @@ void UBAbilitySystemComponent::GrantInitialAbilities()
 
 	for (const TPair<EBAbilityInputID,TSubclassOf<UGameplayAbility>>& AbilityPair: BasicAbilities)
 	{
-		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 1, (int32)AbilityPair.Key));
+		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 4, (int32)AbilityPair.Key));
 	}
 }
