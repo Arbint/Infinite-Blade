@@ -4,6 +4,8 @@
 #include "Animation/AN_TraceTarget.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemGlobals.h"
+#include "GameplayCueManager.h"
 #include "Engine/EngineTypes.h"
 
 void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference)
@@ -49,6 +51,12 @@ void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase
 					continue;
 
 				TargetActors.Add(HitResult.GetActor());
+
+				FGameplayCueParameters CueParams;
+				CueParams.Location = HitResult.ImpactPoint;
+				CueParams.Normal = HitResult.ImpactNormal;
+				UAbilitySystemGlobals::Get().GetGameplayCueManager()->HandleGameplayCues(HitResult.GetActor(), 
+					GameplayCueTags,EGameplayCueEvent::Executed, CueParams);
 			}
 		}
 	}

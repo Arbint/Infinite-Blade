@@ -19,6 +19,9 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
+	FGameplayTagContainer GameplayCueTags;
+
+	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
 	FGameplayTag TargetEventTag;
 
 	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
