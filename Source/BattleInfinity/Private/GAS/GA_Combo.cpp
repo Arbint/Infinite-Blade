@@ -34,6 +34,16 @@ void UGA_Combo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const F
 	}
 	NextComboName = NAME_None;
 	BindInputPressDelegate();
+
+	if (K2_HasAuthority())
+	{
+		UAbilityTask_WaitGameplayEvent* WaitDamageEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this,
+			GetComboTargetReceivedTag()
+			);
+
+		WaitDamageEvent->EventReceived.AddDynamic(this, &UGA_Combo::HandleDamageEvent);
+		WaitDamageEvent->ReadyForActivation();
+	}
 }
 
 FGameplayTag UGA_Combo::GetComboChangeTag()
@@ -94,4 +104,14 @@ void UGA_Combo::HandleComboChange(FGameplayEventData Payload)
 	TArray<FName> EventTagNames;
 	UGameplayTagsManager::Get().SplitGameplayTagFName(EventTag, EventTagNames);
 	NextComboName = EventTagNames.Last();
+}
+
+void UGA_Combo::HandleDamageEvent(FGameplayEventData Payload)
+{
+	if (K2_HasAuthority())
+	{
+		FGameplayEffectSpecHandle DamageEffectSpecHandle =
+			MakeOutgoingGameplayEffectSpec(DefaultDamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
+		K2_ApplyGameplayEffectSpecToTarget(DamageEffectSpecHandle, Payload.TargetData);
+	}
 }

@@ -27,11 +27,16 @@ private:
 
 	void TryCommitNextCombo();
 
+	UPROPERTY(EditDefaultsOnly, Category="GameplayEffect")
+	TSubclassOf<UGameplayEffect> DefaultDamageEffect;
+
 	UPROPERTY(EditDefaultsOnly, Category="Animation")
 	UAnimMontage* ComboMontage;
 
 	UFUNCTION()
 	void HandleComboChange(FGameplayEventData Payload);
 
+	UFUNCTION()
+	void HandleDamageEvent(FGameplayEventData Payload);
 	FName NextComboName;
 };
