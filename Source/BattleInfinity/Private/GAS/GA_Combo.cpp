@@ -46,6 +46,11 @@ FGameplayTag UGA_Combo::GetComboEndTag()
 	return FGameplayTag::RequestGameplayTag("ability.combo.change.end");
 }
 
+FGameplayTag UGA_Combo::GetComboTargetReceivedTag()
+{
+	return FGameplayTag::RequestGameplayTag("ability.combo.damage");
+}
+
 void UGA_Combo::BindInputPressDelegate()
 {
 	UAbilityTask_WaitInputPress* WaitInputPress = UAbilityTask_WaitInputPress::WaitInputPress(this);

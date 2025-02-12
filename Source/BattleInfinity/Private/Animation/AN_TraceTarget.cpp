@@ -19,6 +19,7 @@ void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase
 	if (TargetSocketNames.Num() <= 1)
 		return;
 
+	TArray<TWeakObjectPtr<AActor>> TargetActors;
 	for (int i = 1; i < TargetSocketNames.Num(); ++i)
 	{
 		FVector Start = MeshComp->GetSocketLocation(TargetSocketNames[i-1]);
@@ -39,7 +40,22 @@ void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase
 			Start, End, TraceRadius, ObjectTypeQueries, false, ActorsToIgnore, DebugType, HitResults, true
 			))
 		{
+			for (const FHitResult& HitResult : HitResults)
+			{
+				if (!IsValid(HitResult.GetActor()))
+					continue;
 				
+				if (TargetActors.Contains(HitResult.GetActor()))
+					continue;
+
+				TargetActors.Add(HitResult.GetActor());
+			}
 		}
 	}
+	
+	FGameplayEventData Payload;
+	FGameplayAbilityTargetData_ActorArray* TargetDataActorArray = new FGameplayAbilityTargetData_ActorArray;
+	TargetDataActorArray->SetActors(TargetActors);
+	Payload.TargetData.Add(TargetDataActorArray);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(MeshComp->GetOwner(), TargetEventTag, Payload);
 }

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
+#include "GameplayTagContainer.h"
 #include "AN_TraceTarget.generated.h"
 
 /**
@@ -17,6 +18,9 @@ public:
 	virtual void Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase* Animation, const FAnimNotifyEventReference& EventReference) override;
 
 private:
+	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
+	FGameplayTag TargetEventTag;
+
 	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
 	bool bDrawDebug = true;
 
