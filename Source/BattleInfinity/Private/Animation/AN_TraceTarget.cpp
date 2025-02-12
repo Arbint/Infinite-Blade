@@ -56,7 +56,7 @@ void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase
 				CueParams.Location = HitResult.ImpactPoint;
 				CueParams.Normal = HitResult.ImpactNormal;
 				UAbilitySystemGlobals::Get().GetGameplayCueManager()->HandleGameplayCues(HitResult.GetActor(), 
-					GameplayCueTags,EGameplayCueEvent::Executed, CueParams);
+					GameplayCueTags,EGameplayCueEvent::Executed,CueParams);
 			}
 		}
 	}
