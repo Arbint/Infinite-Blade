@@ -61,4 +61,9 @@ private:
 
 	void StartDeathSequence();
 	void Respawn();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Death")
+	UAnimMontage* DeathMontage;
+
+	void PlayDeathAnimation();
 };

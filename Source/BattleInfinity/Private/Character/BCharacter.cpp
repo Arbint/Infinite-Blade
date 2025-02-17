@@ -89,11 +89,18 @@ void ABCharacter::DeadTagUpdated(const FGameplayTag Tag, int32 NewCount)
 void ABCharacter::StartDeathSequence()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Dead"))
+	PlayDeathAnimation();
 }
 
 void ABCharacter::Respawn()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Respawn"))
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+}
+
+void ABCharacter::PlayDeathAnimation()
+{
+	PlayAnimMontage(DeathMontage);
 }
 
 void ABCharacter::ConfigureOverheadWidget()
