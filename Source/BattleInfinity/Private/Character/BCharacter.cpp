@@ -88,14 +88,26 @@ void ABCharacter::DeadTagUpdated(const FGameplayTag Tag, int32 NewCount)
 
 void ABCharacter::StartDeathSequence()
 {
+	OnDead();
 	UE_LOG(LogTemp, Warning, TEXT("Dead"))
 	PlayDeathAnimation();
 }
 
 void ABCharacter::Respawn()
 {
+	OnRespawn();
 	UE_LOG(LogTemp, Warning, TEXT("Respawn"))
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+}
+
+void ABCharacter::OnDead()
+{
+	//Override in child class
+}
+
+void ABCharacter::OnRespawn()
+{
+	//Override in child class
 }
 
 void ABCharacter::PlayDeathAnimation()

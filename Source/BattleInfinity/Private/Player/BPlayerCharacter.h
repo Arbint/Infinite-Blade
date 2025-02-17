@@ -19,6 +19,9 @@ public:
 	virtual void PawnClientRestart() override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 private:	
+	virtual void OnDead() override;
+	virtual void OnRespawn() override;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class UCameraComponent* ViewCam;
 
