@@ -15,6 +15,7 @@ class UBAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
 public:
+	UBAbilitySystemComponent();
 	void ApplyInitialEffects();
 	void GrantInitialAbilities();
 	
@@ -27,4 +28,6 @@ private:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TMap<EBAbilityInputID, TSubclassOf<UGameplayAbility>> BasicAbilities;
+
+	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
 };

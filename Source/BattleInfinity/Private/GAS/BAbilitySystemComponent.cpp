@@ -2,6 +2,13 @@
 
 
 #include "GAS/BAbilitySystemComponent.h"
+#include "GAS/BAttributeSet.h"
+
+UBAbilitySystemComponent::UBAbilitySystemComponent()
+{
+	GetGameplayAttributeValueChangeDelegate(UBAttributeSet::GetHealthAttribute())
+		.AddUObject(this, &UBAbilitySystemComponent::HealthUpdated);
+}
 
 void UBAbilitySystemComponent::ApplyInitialEffects()
 {
@@ -28,5 +35,13 @@ void UBAbilitySystemComponent::GrantInitialAbilities()
 	for (const TPair<EBAbilityInputID,TSubclassOf<UGameplayAbility>>& AbilityPair: BasicAbilities)
 	{
 		GiveAbility(FGameplayAbilitySpec(AbilityPair.Value, 4, (int32)AbilityPair.Key));
+	}
+}
+
+void UBAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (ChangeData.NewValue == 0.f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("I am Dead"))
 	}
 }

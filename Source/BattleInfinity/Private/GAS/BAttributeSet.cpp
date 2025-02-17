@@ -13,6 +13,20 @@ void UBAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME_CONDITION_NOTIFY(UBAttributeSet, MaxMana, COND_None, REPNOTIFY_Always);
 }
 
+void UBAttributeSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	Super::PreAttributeChange(Attribute, NewValue);
+	if (Attribute == GetHealthAttribute()) 
+	{
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxHealth()); 
+	}
+
+	if (Attribute == GetManaAttribute()) 
+	{
+		NewValue = FMath::Clamp(NewValue, 0.f, GetMaxMana()); 
+	}
+}
+
 void UBAttributeSet::OnRep_Health(const FGameplayAttributeData& OldValue)
 {
 	GAMEPLAYATTRIBUTE_REPNOTIFY(UBAttributeSet, Health, OldValue);
