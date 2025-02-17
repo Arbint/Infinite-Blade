@@ -18,6 +18,7 @@ ABCharacter::ABCharacter()
 
 	OverheadWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget Component");
 	OverheadWidgetComponent->SetupAttachment(GetRootComponent());
+	BindAbilitySystemDelegates();
 }
 
 void ABCharacter::ServerSideInit()
@@ -62,6 +63,37 @@ void ABCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 UAbilitySystemComponent* ABCharacter::GetAbilitySystemComponent() const
 {
 	return BAbilitySystemComponent;
+}
+
+void ABCharacter::BindAbilitySystemDelegates()
+{
+	if (BAbilitySystemComponent)
+	{
+		BAbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag("stat.dead"))
+			.AddUObject(this, &ABCharacter::DeadTagUpdated);
+	}
+}
+
+void ABCharacter::DeadTagUpdated(const FGameplayTag Tag, int32 NewCount)
+{
+	if (NewCount != 0)
+	{
+		StartDeathSequence();
+	}
+	else
+	{
+		Respawn();
+	}
+}
+
+void ABCharacter::StartDeathSequence()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Dead"))
+}
+
+void ABCharacter::Respawn()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Respawn"))
 }
 
 void ABCharacter::ConfigureOverheadWidget()

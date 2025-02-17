@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
+#include "GameplayTagContainer.h"
 #include "BCharacter.generated.h"
 
 UCLASS()
@@ -37,6 +38,8 @@ public:
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 private:
+	void BindAbilitySystemDelegates();
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "GameplayAbility")
 	class UBAbilitySystemComponent* BAbilitySystemComponent;
 
@@ -50,4 +53,12 @@ private:
 	class UWidgetComponent* OverheadWidgetComponent;
 
 	void ConfigureOverheadWidget();
+	/************************************************/
+	/*             Death and Respawn                */
+	/************************************************/
+private:
+	void DeadTagUpdated(const FGameplayTag Tag, int32 NewCount);
+
+	void StartDeathSequence();
+	void Respawn();
 };

@@ -40,8 +40,15 @@ void UBAbilitySystemComponent::GrantInitialAbilities()
 
 void UBAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
+	if (!GetOwner() || !GetOwner()->HasAuthority())
+		return;
+
 	if (ChangeData.NewValue == 0.f)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("I am Dead"))
+		if (!HasAnyMatchingGameplayTags(FGameplayTagContainer{ FGameplayTag::RequestGameplayTag("stat.dead") }))
+		{
+			FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingSpec(DeathEffectClass, 1, MakeEffectContext());
+			ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
+		}
 	}
 }

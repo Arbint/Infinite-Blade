@@ -29,5 +29,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
 	TMap<EBAbilityInputID, TSubclassOf<UGameplayAbility>> BasicAbilities;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Abilities")
+	TSubclassOf<UGameplayEffect> DeathEffectClass;
+
 	void HealthUpdated(const FOnAttributeChangeData& ChangeData);
 };
