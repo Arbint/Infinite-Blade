@@ -44,12 +44,31 @@ void UBAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& Chang
 	if (!GetOwner() || !GetOwner()->HasAuthority())
 		return;
 
+	bool bFound = false;
+	float MaxHealth = GetGameplayAttributeValue(UBAttributeSet::GetMaxHealthAttribute(), bFound);
+	if (ChangeData.NewValue >= MaxHealth)
+	{
+		if (!HasMatchingGameplayTag(UBAbilitySystemStatics::GetHealthFullTag()))
+		{
+			AddLooseGameplayTag(UBAbilitySystemStatics::GetHealthFullTag());
+		}
+	}
+	else
+	{
+		RemoveLooseGameplayTag(UBAbilitySystemStatics::GetHealthFullTag());
+	}
+
 	if (ChangeData.NewValue == 0.f)
 	{
-		if (!HasMatchingGameplayTag(UBAbilitySystemStatics::GetDeathStatTag()))
+		if (!HasMatchingGameplayTag(UBAbilitySystemStatics::GetHealthEmptyTag()))
 		{
+			AddLooseGameplayTag(UBAbilitySystemStatics::GetHealthEmptyTag());
 			FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingSpec(DeathEffectClass, 1, MakeEffectContext());
 			ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
 		}
+	}
+	else
+	{
+		RemoveLooseGameplayTag(UBAbilitySystemStatics::GetHealthEmptyTag());
 	}
 }
