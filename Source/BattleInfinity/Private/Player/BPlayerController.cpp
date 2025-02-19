@@ -5,6 +5,17 @@
 #include "Player/BPlayerCharacter.h"
 #include "Widgets/GameplayWidget.h"
 
+
+void ABPlayerController::SetGenericTeamId(const FGenericTeamId& NewTeamID)
+{
+	TeamId = NewTeamID;
+}
+
+FGenericTeamId ABPlayerController::GetGenericTeamId() const
+{
+	return TeamId;
+}
+
 void ABPlayerController::OnPossess(APawn* NewPawn)
 {
 	Super::OnPossess(NewPawn);
