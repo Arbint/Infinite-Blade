@@ -71,4 +71,6 @@ private:
 	void PlayDeathAnimation();
 	void SetEnableRagdoll(bool bEnableRagdoll);
 	void DeathMontageFinished();
+
+	FTransform CachedMeshRelativeTransform;
 };

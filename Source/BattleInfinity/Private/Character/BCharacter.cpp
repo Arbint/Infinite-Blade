@@ -44,6 +44,7 @@ void ABCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	ConfigureOverheadWidget();
+	CachedMeshRelativeTransform = GetMesh()->GetRelativeTransform();
 }
 
 // Called every frame
@@ -115,12 +116,26 @@ void ABCharacter::PlayDeathAnimation()
 {
 	float DeathMontageDuration = PlayAnimMontage(DeathMontage);
 	FTimerHandle DeathMontagePlayTimerHandle;
-	GetWorldTimerManager().SetTimer(DeathMontagePlayTimerHandle, this, &ABCharacter::DeathMontageFinished, DeathMontageDuration);
+	GetWorldTimerManager().SetTimer(DeathMontagePlayTimerHandle, this, &ABCharacter::DeathMontageFinished, DeathMontageDuration - 0.8f);
 }
 
 void ABCharacter::SetEnableRagdoll(bool bEnableRagdoll)
 {
-	//
+	// the mesh needs to be detached when in ragdoll
+	// the mesh should start simulating physics when in ragdoll
+	if (bEnableRagdoll)
+	{
+		GetMesh()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
+	}
+	else
+	{
+		GetMesh()->SetSimulatePhysics(false);
+		GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		GetMesh()->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		GetMesh()->SetRelativeTransform(CachedMeshRelativeTransform);
+	}
 }
 
 void ABCharacter::DeathMontageFinished()
