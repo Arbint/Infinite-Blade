@@ -69,4 +69,6 @@ private:
 	UAnimMontage* DeathMontage;
 
 	void PlayDeathAnimation();
+	void SetEnableRagdoll(bool bEnableRagdoll);
+	void DeathMontageFinished();
 };

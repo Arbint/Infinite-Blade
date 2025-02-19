@@ -95,6 +95,7 @@ void ABCharacter::StartDeathSequence()
 
 void ABCharacter::Respawn()
 {
+	SetEnableRagdoll(false);
 	OnRespawn();
 	UE_LOG(LogTemp, Warning, TEXT("Respawn"))
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
@@ -112,7 +113,19 @@ void ABCharacter::OnRespawn()
 
 void ABCharacter::PlayDeathAnimation()
 {
-	PlayAnimMontage(DeathMontage);
+	float DeathMontageDuration = PlayAnimMontage(DeathMontage);
+	FTimerHandle DeathMontagePlayTimerHandle;
+	GetWorldTimerManager().SetTimer(DeathMontagePlayTimerHandle, this, &ABCharacter::DeathMontageFinished, DeathMontageDuration);
+}
+
+void ABCharacter::SetEnableRagdoll(bool bEnableRagdoll)
+{
+	//
+}
+
+void ABCharacter::DeathMontageFinished()
+{
+	SetEnableRagdoll(true);
 }
 
 void ABCharacter::ConfigureOverheadWidget()
