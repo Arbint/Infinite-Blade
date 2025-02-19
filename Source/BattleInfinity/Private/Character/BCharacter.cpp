@@ -92,6 +92,7 @@ void ABCharacter::StartDeathSequence()
 	OnDead();
 	UE_LOG(LogTemp, Warning, TEXT("Dead"))
 	PlayDeathAnimation();
+	OverheadWidgetComponent->SetHiddenInGame(true);
 }
 
 void ABCharacter::Respawn()
@@ -100,6 +101,7 @@ void ABCharacter::Respawn()
 	OnRespawn();
 	UE_LOG(LogTemp, Warning, TEXT("Respawn"))
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
+	ConfigureOverheadWidget();
 }
 
 void ABCharacter::OnDead()

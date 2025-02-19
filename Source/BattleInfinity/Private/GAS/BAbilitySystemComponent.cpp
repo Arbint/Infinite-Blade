@@ -3,6 +3,7 @@
 
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
+#include "GAS/BAbilitySystemStatics.h"
 
 UBAbilitySystemComponent::UBAbilitySystemComponent()
 {
@@ -45,7 +46,7 @@ void UBAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& Chang
 
 	if (ChangeData.NewValue == 0.f)
 	{
-		if (!HasAnyMatchingGameplayTags(FGameplayTagContainer{ FGameplayTag::RequestGameplayTag("stat.dead") }))
+		if (!HasMatchingGameplayTag(UBAbilitySystemStatics::GetDeathStatTag()))
 		{
 			FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingSpec(DeathEffectClass, 1, MakeEffectContext());
 			ApplyGameplayEffectSpecToSelf(*EffectSpecHandle.Data);
