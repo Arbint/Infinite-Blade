@@ -3,7 +3,9 @@
 
 #include "Character/BCharacter.h"
 #include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
 #include "Widgets/OverheadStatWidget.h"
@@ -100,6 +102,9 @@ void ABCharacter::StartDeathSequence()
 	UE_LOG(LogTemp, Warning, TEXT("Dead"))
 	PlayDeathAnimation();
 	OverheadWidgetComponent->SetHiddenInGame(true);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 }
 
 void ABCharacter::Respawn()
@@ -109,6 +114,13 @@ void ABCharacter::Respawn()
 	UE_LOG(LogTemp, Warning, TEXT("Respawn"))
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.f);
 	ConfigureOverheadWidget();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+
+	if (HasAuthority() && GetController())
+	{
+		SetActorTransform(GetController()->StartSpot->GetActorTransform());
+	}
 }
 
 void ABCharacter::OnDead()
