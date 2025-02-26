@@ -4,7 +4,14 @@
 #include "Player/BPlayerController.h"
 #include "Player/BPlayerCharacter.h"
 #include "Widgets/GameplayWidget.h"
+#include "Net/UnrealNetwork.h"
 
+
+void ABPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABPlayerController, TeamId);
+}
 
 void ABPlayerController::SetGenericTeamId(const FGenericTeamId& NewTeamID)
 {

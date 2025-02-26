@@ -15,6 +15,8 @@ class ABPlayerController : public APlayerController, public IGenericTeamAgentInt
 {
 	GENERATED_BODY()
 public:	
+	virtual void GetLifetimeReplicatedProps(TArray< FLifetimeProperty > & OutLifetimeProps) const override;
+
 	/** Assigns Team Agent to given TeamID */
 	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
 	

@@ -6,10 +6,11 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "GenericTeamAgentInterface.h"
 #include "BCharacter.generated.h"
 
 UCLASS()
-class ABCharacter : public ACharacter, public IAbilitySystemInterface
+class ABCharacter : public ACharacter, public IAbilitySystemInterface, public IGenericTeamAgentInterface
 {
 	GENERATED_BODY()
 
@@ -73,4 +74,17 @@ private:
 	void DeathMontageFinished();
 
 	FTransform CachedMeshRelativeTransform;
+
+	/************************************************/
+	/*                     AI                       */
+	/************************************************/
+private:
+	/** Assigns Team Agent to given TeamID */
+	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) { TeamId = NewTeamID; }
+	
+	/** Retrieve team identifier in form of FGenericTeamId */
+	virtual FGenericTeamId GetGenericTeamId() const { return TeamId; }
+
+	UPROPERTY(Replicated)
+	FGenericTeamId TeamId;
 };
