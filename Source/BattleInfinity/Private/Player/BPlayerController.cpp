@@ -30,6 +30,7 @@ void ABPlayerController::OnPossess(APawn* NewPawn)
 	if (BPlayerCharacter)
 	{
 		BPlayerCharacter->ServerSideInit();
+		BPlayerCharacter->SetGenericTeamId(GetGenericTeamId());
 	}
 }
 

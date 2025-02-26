@@ -79,13 +79,15 @@ private:
 	/************************************************/
 	/*                     AI                       */
 	/************************************************/
-private:
+
+public:
 	/** Assigns Team Agent to given TeamID */
 	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) { TeamId = NewTeamID; }
 	
 	/** Retrieve team identifier in form of FGenericTeamId */
 	virtual FGenericTeamId GetGenericTeamId() const { return TeamId; }
 
+private:
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamId;
 };
