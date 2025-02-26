@@ -7,6 +7,7 @@
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
 #include "Widgets/OverheadStatWidget.h"
+#include "Net/UnrealNetwork.h"
 
 // Sets default values
 ABCharacter::ABCharacter()
@@ -37,6 +38,12 @@ void ABCharacter::ClientSideInit()
 	{
 		BAbilitySystemComponent->InitAbilityActorInfo(this, this);
 	}
+}
+
+void ABCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ABCharacter, TeamId);
 }
 
 // Called when the game starts or when spawned
