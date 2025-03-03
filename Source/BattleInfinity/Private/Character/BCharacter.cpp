@@ -2,14 +2,21 @@
 
 
 #include "Character/BCharacter.h"
+
+#include "AIController.h"
+
+#include "BrainComponent.h"
+
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
+
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
-#include "Widgets/OverheadStatWidget.h"
+
 #include "Net/UnrealNetwork.h"
+#include "Widgets/OverheadStatWidget.h"
 
 // Sets default values
 ABCharacter::ABCharacter()
@@ -110,6 +117,12 @@ void ABCharacter::StartDeathSequence()
 
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
+
+	AAIController* ControllerAsAIController = GetController<AAIController>();
+	if (ControllerAsAIController)
+	{
+		ControllerAsAIController->GetBrainComponent()->StopLogic("Dead");
+	}
 }
 
 void ABCharacter::Respawn()
@@ -125,6 +138,12 @@ void ABCharacter::Respawn()
 	if (HasAuthority() && GetController() && GetController()->StartSpot.IsValid())
 	{
 		SetActorTransform(GetController()->StartSpot->GetActorTransform());
+	}
+
+	AAIController* ControllerAsAIController = GetController<AAIController>();
+	if (ControllerAsAIController)
+	{
+		ControllerAsAIController->GetBrainComponent()->StartLogic();
 	}
 }
 

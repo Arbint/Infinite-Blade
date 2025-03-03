@@ -23,6 +23,7 @@ ABAIController::ABAIController()
 		SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 
 		SightConfig->PeripheralVisionAngleDegrees = 120.f;
+		SightConfig->SetMaxAge(5.f);
 
 		AIPerceptionComponent->ConfigureSense(*SightConfig);
 		AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ABAIController::TargetPerceptionUpdated);
