@@ -21,6 +21,8 @@ void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase
 	if (TargetSocketNames.Num() <= 1)
 		return;
 
+	IGenericTeamAgentInterface* OwnerTeamInterface = Cast<IGenericTeamAgentInterface>(MeshComp->GetOwner());
+
 	TArray<TWeakObjectPtr<AActor>> TargetActors;
 	for (int i = 1; i < TargetSocketNames.Num(); ++i)
 	{
@@ -48,6 +50,10 @@ void UAN_TraceTarget::Notify(USkeletalMeshComponent* MeshComp, UAnimSequenceBase
 					continue;
 				
 				if (TargetActors.Contains(HitResult.GetActor()))
+					continue;
+
+				if (OwnerTeamInterface && 
+					!DetectWithTeamAttitudes.Contains(OwnerTeamInterface->GetTeamAttitudeTowards(*HitResult.GetActor())))
 					continue;
 
 				TargetActors.Add(HitResult.GetActor());

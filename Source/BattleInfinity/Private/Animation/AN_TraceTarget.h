@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Animation/AnimNotifies/AnimNotify.h"
 #include "GameplayTagContainer.h"
+#include "GenericTeamAgentInterface.h"
 #include "AN_TraceTarget.generated.h"
 
 /**
@@ -35,4 +36,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
 	TArray<FName> TargetSocketNames;
+
+	UPROPERTY(EditAnywhere, Category = "GameplayAbility")
+	TArray<TEnumAsByte<ETeamAttitude::Type>> DetectWithTeamAttitudes;
 };

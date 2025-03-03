@@ -54,6 +54,11 @@ void ABCharacter::BeginPlay()
 	Super::BeginPlay();
 	ConfigureOverheadWidget();
 	CachedMeshRelativeTransform = GetMesh()->GetRelativeTransform();
+
+	if (HasAuthority() && GetController() && !GetController()->IsPlayerController())
+	{
+		ServerSideInit();
+	}
 }
 
 // Called every frame
@@ -117,7 +122,7 @@ void ABCharacter::Respawn()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 
-	if (HasAuthority() && GetController())
+	if (HasAuthority() && GetController() && GetController()->StartSpot.IsValid())
 	{
 		SetActorTransform(GetController()->StartSpot->GetActorTransform());
 	}
