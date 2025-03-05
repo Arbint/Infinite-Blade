@@ -27,6 +27,7 @@ ABAIController::ABAIController()
 
 		AIPerceptionComponent->ConfigureSense(*SightConfig);
 		AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ABAIController::TargetPerceptionUpdated);
+		AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ABAIController::TargetForgotten);
 	}
 }
 
@@ -47,10 +48,14 @@ void ABAIController::TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus St
 	}
 	else
 	{
-		if (TargetActor == GetCurrentTarget())
-		{
-			SetCurrentTarget(GetNextPerceivedTarget());
-		}
+	}
+}
+
+void ABAIController::TargetForgotten(AActor* TargetActor)
+{
+	if (TargetActor == GetCurrentTarget())
+	{
+		SetCurrentTarget(GetNextPerceivedTarget());
 	}
 }
 

@@ -31,6 +31,9 @@ private:
 	UFUNCTION()
 	void TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus Stimulus);
 
+	UFUNCTION()
+	void TargetForgotten(AActor* TargetActor);
+
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	FName TargetBlackboardKeyName = "Target";
 
