@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "GameplayTagContainer.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "BAIController.generated.h"
 
@@ -17,6 +18,7 @@ class ABAIController : public AAIController
 public:
 	ABAIController();
 	virtual void BeginPlay() override;
+	virtual void OnPossess(APawn* NewPawn) override;
 
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category = "Perception")
@@ -44,4 +46,8 @@ private:
 	AActor* GetNextPerceivedTarget() const;
 
 	void ForgetTargetImmediately(AActor* TargetToForget);
+
+	void PawnDeadTagUpdated(const FGameplayTag GameplayTag, int32 NewCount);
+
+	void SetAllSensesEnabled(bool bSensesEnabled);
 };

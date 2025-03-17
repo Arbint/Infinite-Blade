@@ -7,6 +7,7 @@
 #include "AbilitySystemComponent.h"
 
 #include "BehaviorTree/BlackboardComponent.h"
+#include "BrainComponent.h"
 
 #include "GAS/BAbilitySystemStatics.h"
 
@@ -40,6 +41,16 @@ void ABAIController::BeginPlay()
 {
 	Super::BeginPlay();
 	RunBehaviorTree(BehaviorTree);
+}
+
+void ABAIController::OnPossess(APawn* NewPawn)
+{
+	Super::OnPossess(NewPawn);
+	if (UAbilitySystemComponent* PawnASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(NewPawn))
+	{
+		PawnASC->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetDeathStatTag())
+			.AddUObject(this, &ABAIController::PawnDeadTagUpdated);
+	}
 }
 
 void ABAIController::TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus Stimulus)
@@ -107,7 +118,6 @@ AActor* ABAIController::GetNextPerceivedTarget() const
 			NextTarget = Target;
 		}
 	}
-
 	return NextTarget;
 }
 
@@ -122,5 +132,29 @@ void ABAIController::ForgetTargetImmediately(AActor* TargetToForget)
 		{
 			Stimuli.SetStimulusAge(TNumericLimits<float>::Max());
 		}
+	}
+}
+
+void ABAIController::PawnDeadTagUpdated(const FGameplayTag GameplayTag, int32 NewCount)
+{
+	if (NewCount != 0)
+	{
+		GetBrainComponent()->StopLogic("Dead");
+		AIPerceptionComponent->AgeStimuli(TNumericLimits<float>::Max());
+		SetAllSensesEnabled(false);
+		SetCurrentTarget(nullptr);
+	}
+	else
+	{
+		SetAllSensesEnabled(true);
+		GetBrainComponent()->StartLogic();
+	}
+}
+
+void ABAIController::SetAllSensesEnabled(bool bSensesEnabled)
+{
+	for (auto Iter = AIPerceptionComponent->GetSensesConfigIterator(); Iter; ++Iter)
+	{
+		AIPerceptionComponent->SetSenseEnabled((*Iter)->GetSenseImplementation(), bSensesEnabled);
 	}
 }
