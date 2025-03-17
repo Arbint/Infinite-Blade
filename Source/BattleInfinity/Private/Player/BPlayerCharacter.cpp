@@ -2,6 +2,7 @@
 
 
 #include "Player/BPlayerCharacter.h"
+#include "BattleInfinity/BattleInfinity.h"
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -15,6 +16,7 @@ ABPlayerCharacter::ABPlayerCharacter()
 	CameraBoom->SetupAttachment(GetRootComponent());
 	CameraBoom->bUsePawnControlRotation = true;
 	CameraBoom->TargetArmLength = 1000.f;
+	CameraBoom->ProbeChannel = ECC_CameraBoom;
 	
 	bUseControllerRotationYaw = false;
 

@@ -6,6 +6,7 @@
 #include "AIController.h"
 
 #include "BrainComponent.h"
+#include "BattleInfinity/BattleInfinity.h"
 
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -33,7 +34,10 @@ ABCharacter::ABCharacter()
 	OverheadWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget Component");
 	OverheadWidgetComponent->SetupAttachment(GetRootComponent());
 	BindAbilitySystemDelegates();
-
+	
+	GetCapsuleComponent()->SetCollisionResponseToChannel(ECC_CameraBoom, ECollisionResponse::ECR_Ignore);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	
 	PerceptionStimuliComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>("Perception Stimuli Component");
 }
 
