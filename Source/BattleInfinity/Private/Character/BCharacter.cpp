@@ -132,6 +132,8 @@ void ABCharacter::StartDeathSequence()
 	{
 		ControllerAsAIController->GetBrainComponent()->StopLogic("Dead");
 	}
+
+	PerceptionStimuliComponent->UnregisterFromPerceptionSystem();
 }
 
 void ABCharacter::Respawn()
@@ -154,6 +156,8 @@ void ABCharacter::Respawn()
 	{
 		ControllerAsAIController->GetBrainComponent()->StartLogic();
 	}
+
+	PerceptionStimuliComponent->RegisterWithPerceptionSystem();
 }
 
 void ABCharacter::OnDead()
