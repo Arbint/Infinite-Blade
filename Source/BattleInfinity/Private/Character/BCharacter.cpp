@@ -131,12 +131,6 @@ void ABCharacter::StartDeathSequence()
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Flying);
 
-	AAIController* ControllerAsAIController = GetController<AAIController>();
-	if (ControllerAsAIController)
-	{
-		ControllerAsAIController->GetBrainComponent()->StopLogic("Dead");
-	}
-
 	PerceptionStimuliComponent->UnregisterFromPerceptionSystem();
 }
 
@@ -153,12 +147,6 @@ void ABCharacter::Respawn()
 	if (HasAuthority() && GetController() && GetController()->StartSpot.IsValid())
 	{
 		SetActorTransform(GetController()->StartSpot->GetActorTransform());
-	}
-
-	AAIController* ControllerAsAIController = GetController<AAIController>();
-	if (ControllerAsAIController)
-	{
-		ControllerAsAIController->GetBrainComponent()->StartLogic();
 	}
 
 	PerceptionStimuliComponent->RegisterWithPerceptionSystem();
