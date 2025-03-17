@@ -16,6 +16,10 @@
 #include "GAS/BAttributeSet.h"
 
 #include "Net/UnrealNetwork.h"
+
+#include "Perception/AIPerceptionStimuliSourceComponent.h"
+#include "Perception/AISense_Sight.h"
+
 #include "Widgets/OverheadStatWidget.h"
 
 // Sets default values
@@ -29,6 +33,8 @@ ABCharacter::ABCharacter()
 	OverheadWidgetComponent = CreateDefaultSubobject<UWidgetComponent>("Overhead Widget Component");
 	OverheadWidgetComponent->SetupAttachment(GetRootComponent());
 	BindAbilitySystemDelegates();
+
+	PerceptionStimuliComponent = CreateDefaultSubobject<UAIPerceptionStimuliSourceComponent>("Perception Stimuli Component");
 }
 
 void ABCharacter::ServerSideInit()
@@ -66,6 +72,9 @@ void ABCharacter::BeginPlay()
 	{
 		ServerSideInit();
 	}
+
+	PerceptionStimuliComponent->RegisterWithPerceptionSystem();
+	PerceptionStimuliComponent->RegisterForSense(UAISense_Sight::StaticClass());
 }
 
 // Called every frame

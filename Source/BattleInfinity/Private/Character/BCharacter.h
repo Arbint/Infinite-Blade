@@ -90,4 +90,7 @@ public:
 private:
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamId;
+
+	UPROPERTY()	
+	class UAIPerceptionStimuliSourceComponent* PerceptionStimuliComponent;
 };
