@@ -42,4 +42,6 @@ private:
 	void SetCurrentTarget(AActor* NewTarget);
 
 	AActor* GetNextPerceivedTarget() const;
+
+	void ForgetTargetImmediately(AActor* TargetToForget);
 };

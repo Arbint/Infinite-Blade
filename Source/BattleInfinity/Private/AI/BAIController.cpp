@@ -3,7 +3,12 @@
 
 #include "AI/BAIController.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+
 #include "BehaviorTree/BlackboardComponent.h"
+
+#include "GAS/BAbilitySystemStatics.h"
 
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -48,6 +53,13 @@ void ABAIController::TargetPerceptionUpdated(AActor* TargetActor, FAIStimulus St
 	}
 	else
 	{
+		if (UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetActor))
+		{
+			if (TargetASC->HasMatchingGameplayTag(UBAbilitySystemStatics::GetDeathStatTag()))
+			{
+				ForgetTargetImmediately(TargetActor);
+			}
+		}
 	}
 }
 
@@ -97,4 +109,18 @@ AActor* ABAIController::GetNextPerceivedTarget() const
 	}
 
 	return NextTarget;
+}
+
+void ABAIController::ForgetTargetImmediately(AActor* TargetToForget)
+{
+	for (UAIPerceptionComponent::FActorPerceptionContainer::TIterator iter = PerceptionComponent->GetPerceptualDataIterator(); iter; ++iter)
+	{
+		if (iter->Key != TargetToForget)
+			continue;
+
+		for (FAIStimulus& Stimuli : iter->Value.LastSensedStimuli)
+		{
+			Stimuli.SetStimulusAge(TNumericLimits<float>::Max());
+		}
+	}
 }
