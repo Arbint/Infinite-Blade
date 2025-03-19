@@ -2,8 +2,11 @@
 
 
 #include "Animation/BAnimInstance.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GAS/BAbilitySystemStatics.h"
 #include "Kismet/KismetMathLibrary.h"
 
 void UBAnimInstance::NativeInitializeAnimation()
@@ -13,6 +16,12 @@ void UBAnimInstance::NativeInitializeAnimation()
 	if (OwnerCharacter)
 	{
 		OwnerCharacterMovementComponent = OwnerCharacter->GetCharacterMovement();
+	}
+
+	if (UAbilitySystemComponent* OwnerASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TryGetPawnOwner()))
+	{
+		OwnerASC->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetAimingStatTag()).AddUObject(
+			this, &UBAnimInstance::OwnerAimTagUpdated);
 	}
 }
 
@@ -39,4 +48,9 @@ void UBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	{
 		bIsFalling = OwnerCharacterMovementComponent->IsFalling();
 	}
+}
+
+void UBAnimInstance::OwnerAimTagUpdated(const FGameplayTag GameplayTag, int32 NewCount)
+{
+	bIsAiming = NewCount != 0;
 }

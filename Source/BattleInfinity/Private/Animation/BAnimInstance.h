@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Animation/AnimInstance.h"
+#include "GameplayTagContainer.h"
 #include "BAnimInstance.generated.h"
 
 /**
@@ -42,7 +43,11 @@ public:
 	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
 	float GetLookPitch() const { return LookRotationDelta.Pitch; }
 
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	bool GetIsAiming() const { return bIsAiming; }
+
 private:
+	void OwnerAimTagUpdated(const FGameplayTag GameplayTag, int32 NewCount);
 	UPROPERTY()
 	class ACharacter* OwnerCharacter;
 
@@ -54,6 +59,7 @@ private:
 	float YawSpeed;
 	float SmoothedYawSpeed;
 	bool bIsFalling;
+	bool bIsAiming;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	float YawSpeedSmoothRate = 7.f;
