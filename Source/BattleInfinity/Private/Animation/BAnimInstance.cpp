@@ -30,7 +30,8 @@ void UBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 	Super::NativeUpdateAnimation(DeltaSeconds);
 	if (OwnerCharacter)
 	{
-		Speed = OwnerCharacter->GetVelocity().Length();
+		FVector OwnerVelocity = OwnerCharacter->GetVelocity();
+		Speed = OwnerVelocity.Length();
 
 		FRotator BodyRotation = OwnerCharacter->GetActorRotation();
 		FRotator RotationDelta = UKismetMathLibrary::NormalizedDeltaRotator(BodyRotation, PrevBodyRotation);
@@ -42,12 +43,20 @@ void UBAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 
 		FRotator AimRotation = OwnerCharacter->GetBaseAimRotation();
 		LookRotationDelta = UKismetMathLibrary::NormalizedDeltaRotator(AimRotation, BodyRotation);
+
+		ForwardSpeed = OwnerVelocity.Dot(OwnerCharacter->GetActorForwardVector());
+		RightSpeed = OwnerVelocity.Dot(OwnerCharacter->GetActorRightVector());
 	}
 
 	if (OwnerCharacterMovementComponent)
 	{
 		bIsFalling = OwnerCharacterMovementComponent->IsFalling();
 	}
+}
+
+bool UBAnimInstance::ShouldDoFullBody() const
+{
+	return GetIsNotMoving() && (!GetIsAiming());
 }
 
 void UBAnimInstance::OwnerAimTagUpdated(const FGameplayTag GameplayTag, int32 NewCount)

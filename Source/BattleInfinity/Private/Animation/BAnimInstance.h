@@ -46,6 +46,15 @@ public:
 	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
 	bool GetIsAiming() const { return bIsAiming; }
 
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	float GetForwardSpeed() const { return ForwardSpeed; }
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	float GetRightSpeed() const { return RightSpeed; }
+
+	UFUNCTION(BlueprintCallable, meta=(BlueprintThreadSafe))
+	bool ShouldDoFullBody() const;
+
 private:
 	void OwnerAimTagUpdated(const FGameplayTag GameplayTag, int32 NewCount);
 	UPROPERTY()
@@ -58,6 +67,8 @@ private:
 
 	float YawSpeed;
 	float SmoothedYawSpeed;
+	float ForwardSpeed;
+	float RightSpeed;
 	bool bIsFalling;
 	bool bIsAiming;
 
