@@ -27,6 +27,9 @@ private:
 	UPROPERTY()
 	class UAISenseConfig_Sight* SightConfig;
 
+	UPROPERTY()
+	class UAISenseConfig_Damage* DamageConfig;
+
 	UPROPERTY(EditDefaultsOnly, Category = "AI")
 	class UBehaviorTree* BehaviorTree;
 

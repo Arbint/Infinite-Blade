@@ -5,7 +5,9 @@
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
 #include "Abilities/Tasks/AbilityTask_WaitInputPress.h"
+#include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayTagsManager.h"
+#include "Perception/AISense_Damage.h"
 
 void UGA_Combo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
@@ -120,5 +122,10 @@ void UGA_Combo::HandleDamageEvent(FGameplayEventData Payload)
 		FGameplayEffectSpecHandle DamageEffectSpecHandle =
 			MakeOutgoingGameplayEffectSpec(DamageEffectClass, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
 		K2_ApplyGameplayEffectSpecToTarget(DamageEffectSpecHandle, Payload.TargetData);
+		for (AActor* Target : UAbilitySystemBlueprintLibrary::GetAllActorsFromTargetData(Payload.TargetData))
+		{
+			UAISense_Damage::ReportDamageEvent(this, Target, GetAvatarActorFromActorInfo(), 1,
+				Target->GetActorLocation(), Target->GetActorLocation());
+		}
 	}
 }

@@ -13,28 +13,30 @@
 
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Damage.h"
 
 ABAIController::ABAIController()
 {
 	AIPerceptionComponent = CreateDefaultSubobject<UAIPerceptionComponent>("Perception Component");
+
+	DamageConfig = CreateDefaultSubobject<UAISenseConfig_Damage>("Damage Config");
+	DamageConfig->SetMaxAge(5.f);
+	AIPerceptionComponent->ConfigureSense(*DamageConfig);
+
 	SightConfig = CreateDefaultSubobject<UAISenseConfig_Sight>("Sight Config");
+	SightConfig->SightRadius = 1000.f;
+	SightConfig->LoseSightRadius = 1200.f;
 
-	if (SightConfig && AIPerceptionComponent)
-	{
-		SightConfig->SightRadius = 1000.f;
-		SightConfig->LoseSightRadius = 1200.f;
+	SightConfig->DetectionByAffiliation.bDetectEnemies = true;
+	SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
+	SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
 
-		SightConfig->DetectionByAffiliation.bDetectEnemies = true;
-		SightConfig->DetectionByAffiliation.bDetectFriendlies = false;
-		SightConfig->DetectionByAffiliation.bDetectNeutrals = false;
+	SightConfig->PeripheralVisionAngleDegrees = 120.f;
+	SightConfig->SetMaxAge(5.f);
 
-		SightConfig->PeripheralVisionAngleDegrees = 120.f;
-		SightConfig->SetMaxAge(5.f);
-
-		AIPerceptionComponent->ConfigureSense(*SightConfig);
-		AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ABAIController::TargetPerceptionUpdated);
-		AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ABAIController::TargetForgotten);
-	}
+	AIPerceptionComponent->ConfigureSense(*SightConfig);
+	AIPerceptionComponent->OnTargetPerceptionUpdated.AddDynamic(this, &ABAIController::TargetPerceptionUpdated);
+	AIPerceptionComponent->OnTargetPerceptionForgotten.AddDynamic(this, &ABAIController::TargetForgotten);
 }
 
 void ABAIController::BeginPlay()
@@ -86,7 +88,7 @@ const UObject* ABAIController::GetCurrentTarget() const
 {
 	if (!GetBlackboardComponent())
 		return nullptr;
-	
+
 	return GetBlackboardComponent()->GetValueAsObject(TargetBlackboardKeyName);
 }
 

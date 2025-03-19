@@ -20,6 +20,7 @@
 
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include "Perception/AISense_Sight.h"
+#include "Perception/AISense_Damage.h"
 
 #include "Widgets/OverheadStatWidget.h"
 
@@ -79,6 +80,7 @@ void ABCharacter::BeginPlay()
 
 	PerceptionStimuliComponent->RegisterWithPerceptionSystem();
 	PerceptionStimuliComponent->RegisterForSense(UAISense_Sight::StaticClass());
+	PerceptionStimuliComponent->RegisterForSense(UAISense_Damage::StaticClass());
 }
 
 // Called every frame
