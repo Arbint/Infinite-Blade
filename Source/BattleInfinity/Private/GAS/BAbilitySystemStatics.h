@@ -20,4 +20,5 @@ public:
 	static FGameplayTag GetHealthEmptyTag();
 	static FGameplayTag GetManaFullTag();
 	static FGameplayTag GetManaEmptyTag();
+	static FGameplayTag GetAimingStatTag();
 };

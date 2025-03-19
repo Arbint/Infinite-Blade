@@ -26,3 +26,8 @@ FGameplayTag UBAbilitySystemStatics::GetManaEmptyTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.manaEmpty");
 }
+
+FGameplayTag UBAbilitySystemStatics::GetAimingStatTag()
+{
+	return FGameplayTag::RequestGameplayTag("stat.aiming");
+}
