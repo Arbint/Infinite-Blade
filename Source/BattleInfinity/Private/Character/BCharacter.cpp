@@ -205,6 +205,13 @@ void ABCharacter::AimTagUpdated(const FGameplayTag Tag, int32 NewCount)
 
 	bUseControllerRotationYaw = bIsAiming;
 	GetCharacterMovement()->bOrientRotationToMovement = !bIsAiming;
+	OnAimStateUpdated(bIsAiming);
+}
+
+
+void ABCharacter::OnAimStateUpdated(bool bIsAiming)
+{
+	//override in child class
 }
 
 void ABCharacter::ConfigureOverheadWidget()

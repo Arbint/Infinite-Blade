@@ -56,4 +56,19 @@ private:
 	void HandleMoveInput(const struct FInputActionValue& InputActionValue);
 	void HandleAbilityInput(const struct FInputActionValue& InputActionValue, EBAbilityInputID InputID);
 
+	/*********************************************/	
+	/*                Camera                     */
+	/*********************************************/	
+private:
+	virtual void OnAimStateUpdated(bool bIsAiming) override;
+
+	FTimerHandle CameraLerpTimerHandle;	
+	void StartCameraLerp(const FVector& GoalLocalOffset);
+	void UpdateCameraLerp(FVector GoalLocalOffset);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Lerp")
+	float CameraLerpRate = 20.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Camera Lerp")
+	FVector AimCameraLocalOffet;
 };

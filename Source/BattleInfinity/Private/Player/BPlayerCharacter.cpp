@@ -100,6 +100,31 @@ void ABPlayerCharacter::HandleAbilityInput(const FInputActionValue& InputActionV
 	}
 }
 
+void ABPlayerCharacter::OnAimStateUpdated(bool bIsAiming)
+{
+	StartCameraLerp(bIsAiming ? AimCameraLocalOffet : FVector{0.f});
+}
+
+void ABPlayerCharacter::StartCameraLerp(const FVector& GoalLocalOffset)
+{
+	GetWorldTimerManager().ClearTimer(CameraLerpTimerHandle);
+	CameraLerpTimerHandle = GetWorldTimerManager().SetTimerForNextTick(FTimerDelegate::CreateUObject(this, &ABPlayerCharacter::UpdateCameraLerp, GoalLocalOffset));
+}
+
+void ABPlayerCharacter::UpdateCameraLerp(FVector GoalLocalOffset)
+{
+	FVector CameraCurrentRelativeLoc = ViewCam->GetRelativeLocation();
+	if (FVector::Distance(CameraCurrentRelativeLoc, GoalLocalOffset) < 1.f)
+	{
+		ViewCam->SetRelativeLocation(GoalLocalOffset);
+		return;
+	}
+
+	float LerpAlpha = CameraLerpRate * GetWorld()->GetDeltaSeconds();
+	ViewCam->SetRelativeLocation(FMath::Lerp(CameraCurrentRelativeLoc, GoalLocalOffset, LerpAlpha));
+	CameraLerpTimerHandle = GetWorldTimerManager().SetTimerForNextTick(FTimerDelegate::CreateUObject(this, &ABPlayerCharacter::UpdateCameraLerp, GoalLocalOffset));
+}
+
 FVector ABPlayerCharacter::GetLookRightDirection() const
 {
 	return ViewCam->GetRightVector();

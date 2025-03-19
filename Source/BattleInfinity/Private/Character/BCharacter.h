@@ -81,6 +81,7 @@ private:
 	/************************************************/
 private:
 	void AimTagUpdated(const FGameplayTag Tag, int32 NewCount);
+	virtual void OnAimStateUpdated(bool bIsAiming);
 
 	/************************************************/
 	/*                     AI                       */
