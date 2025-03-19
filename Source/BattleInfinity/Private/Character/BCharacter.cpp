@@ -13,6 +13,7 @@
 #include "Components/WidgetComponent.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GAS/BAbilitySystemStatics.h"
 #include "GAS/BAbilitySystemComponent.h"
 #include "GAS/BAttributeSet.h"
 
@@ -106,8 +107,11 @@ void ABCharacter::BindAbilitySystemDelegates()
 {
 	if (BAbilitySystemComponent)
 	{
-		BAbilitySystemComponent->RegisterGameplayTagEvent(FGameplayTag::RequestGameplayTag("stat.dead"))
+		BAbilitySystemComponent->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetDeathStatTag())
 			.AddUObject(this, &ABCharacter::DeadTagUpdated);
+
+		BAbilitySystemComponent->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetAimingStatTag())
+			.AddUObject(this, &ABCharacter::AimTagUpdated);
 	}
 }
 
@@ -193,6 +197,14 @@ void ABCharacter::SetEnableRagdoll(bool bEnableRagdoll)
 void ABCharacter::DeathMontageFinished()
 {
 	SetEnableRagdoll(true);
+}
+
+void ABCharacter::AimTagUpdated(const FGameplayTag Tag, int32 NewCount)
+{
+	bool bIsAiming = NewCount != 0;
+
+	bUseControllerRotationYaw = bIsAiming;
+	GetCharacterMovement()->bOrientRotationToMovement = !bIsAiming;
 }
 
 void ABCharacter::ConfigureOverheadWidget()

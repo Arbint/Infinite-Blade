@@ -77,6 +77,12 @@ private:
 	FTransform CachedMeshRelativeTransform;
 
 	/************************************************/
+	/*                     Aiming                   */
+	/************************************************/
+private:
+	void AimTagUpdated(const FGameplayTag Tag, int32 NewCount);
+
+	/************************************************/
 	/*                     AI                       */
 	/************************************************/
 
