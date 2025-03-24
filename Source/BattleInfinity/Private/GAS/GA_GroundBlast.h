@@ -19,4 +19,13 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* CastMontage;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	TSubclassOf<class ATA_GroundPick> GroundPickTargetActorClass;
+
+	UFUNCTION()
+	void TargetReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle);
+
+	UFUNCTION()
+	void TargetCancelled(const FGameplayAbilityTargetDataHandle& TargetDataHandle);
 };

@@ -3,7 +3,9 @@
 
 #include "GAS/GA_GroundBlast.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
+#include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
 #include "GAS/BAbilitySystemStatics.h"
+#include "GAS/TA_GroundPick.h"
 
 UGA_GroundBlast::UGA_GroundBlast()
 {
@@ -24,4 +26,26 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 	PlayCastMontage->OnCompleted.AddDynamic(this, &UGA_GroundBlast::K2_EndAbility);
 
 	PlayCastMontage->ReadyForActivation();
+
+	UAbilityTask_WaitTargetData* WaitTargetData = UAbilityTask_WaitTargetData::WaitTargetData(this,
+		NAME_None, EGameplayTargetingConfirmation::UserConfirmed, GroundPickTargetActorClass);
+	WaitTargetData->ValidData.AddDynamic(this, &UGA_GroundBlast::TargetReceived);
+	WaitTargetData->Cancelled.AddDynamic(this, &UGA_GroundBlast::TargetCancelled);
+	WaitTargetData->ReadyForActivation();
+
+	AGameplayAbilityTargetActor* TargetActor = nullptr;
+	WaitTargetData->BeginSpawningActor(this, GroundPickTargetActorClass, TargetActor);
+	WaitTargetData->FinishSpawningActor(this, TargetActor);
+}
+
+void UGA_GroundBlast::TargetReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Target Received"))
+	K2_EndAbility();
+}
+
+void UGA_GroundBlast::TargetCancelled(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Target Cancelled"))
+	K2_EndAbility();
 }
