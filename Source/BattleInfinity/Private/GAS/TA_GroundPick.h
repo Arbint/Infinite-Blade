@@ -16,10 +16,19 @@ class ATA_GroundPick : public AGameplayAbilityTargetActor
 public:		
 	ATA_GroundPick();
 	virtual void Tick(float DeltaSeconds) override;
+	virtual void ConfirmTargetingAndContinue() override;
 
 private:
 	FVector GetTargetingAimLoc() const;
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	bool bDetectEnemy = true;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	bool bDetectFriendly = false;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	float TargetMaxDistance = 2000.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	float TargetAreaRadius = 300.f;
 };

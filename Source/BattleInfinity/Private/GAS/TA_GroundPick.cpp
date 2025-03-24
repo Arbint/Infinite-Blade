@@ -2,7 +2,11 @@
 
 
 #include "GAS/TA_GroundPick.h"
+#include "Abilities/GameplayAbility.h"
+#include "Engine/OverlapResult.h"
+#include "GenericTeamAgentInterface.h"
 #include "TA_GroundPick.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 ATA_GroundPick::ATA_GroundPick()
 {
@@ -16,6 +20,37 @@ void ATA_GroundPick::Tick(float DeltaSeconds)
 	{
 		SetActorLocation(GetTargetingAimLoc());
 	}
+}
+
+void ATA_GroundPick::ConfirmTargetingAndContinue()
+{
+	TArray<FOverlapResult> OverlapResults;
+	FCollisionObjectQueryParams ObjectQueryParams;
+	ObjectQueryParams.AddObjectTypesToQuery(ECC_Pawn);
+	FCollisionShape CollisionShape = FCollisionShape::MakeSphere(TargetAreaRadius);
+
+	GetWorld()->OverlapMultiByObjectType(OverlapResults, GetActorLocation(),
+		FQuat::Identity, ObjectQueryParams, CollisionShape 	
+		);
+	
+	IGenericTeamAgentInterface* OwnerTeamInterface = Cast<IGenericTeamAgentInterface>(
+		OwningAbility->GetAvatarActorFromActorInfo());
+
+	TSet<AActor*> TargetActors;
+	for (FOverlapResult& OverlapResult : OverlapResults)
+	{
+		if (!OverlapResult.GetActor() || !OwnerTeamInterface)
+			continue;
+
+		if (OwnerTeamInterface->GetTeamAttitudeTowards(*OverlapResult.GetActor()) == ETeamAttitude::Friendly && !bDetectFriendly)
+			continue;
+
+		if (OwnerTeamInterface->GetTeamAttitudeTowards(*OverlapResult.GetActor()) == ETeamAttitude::Hostile && !bDetectEnemy)
+			continue;
+
+		TargetActors.Add(OverlapResult.GetActor());
+	}
+	TargetDataReadyDelegate.Broadcast(UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(TargetActors.Array(), false));
 }
 
 FVector ATA_GroundPick::GetTargetingAimLoc() const
