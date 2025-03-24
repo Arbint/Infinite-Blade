@@ -42,12 +42,7 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 
 void UGA_GroundBlast::TargetReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Target Received"))
-	for (const AActor* TargetActor : UAbilitySystemBlueprintLibrary::GetAllActorsFromTargetData(TargetDataHandle))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Found Target %s"), *(TargetActor->GetName()));
-	}
-
+	BP_ApplyGameplayEffectToTarget(TargetDataHandle, DamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
 	K2_EndAbility();
 }
 

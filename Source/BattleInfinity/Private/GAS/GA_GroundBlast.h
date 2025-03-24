@@ -23,6 +23,9 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	TSubclassOf<class ATA_GroundPick> GroundPickTargetActorClass;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	TSubclassOf<UGameplayEffect> DamageEffect;
+
 	UFUNCTION()
 	void TargetReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle);
 
