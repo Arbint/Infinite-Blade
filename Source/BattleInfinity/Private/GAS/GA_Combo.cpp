@@ -7,7 +7,13 @@
 #include "Abilities/Tasks/AbilityTask_WaitInputPress.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameplayTagsManager.h"
+#include "GAS/BAbilitySystemStatics.h"
 #include "Perception/AISense_Damage.h"
+
+UGA_Combo::UGA_Combo()
+{
+	AbilityTags.AddTag(UBAbilitySystemStatics::GetBasicAttackAbilityTag());
+}
 
 void UGA_Combo::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {

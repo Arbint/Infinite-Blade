@@ -21,4 +21,5 @@ public:
 	static FGameplayTag GetManaFullTag();
 	static FGameplayTag GetManaEmptyTag();
 	static FGameplayTag GetAimingStatTag();
+	static FGameplayTag GetBasicAttackAbilityTag();
 };

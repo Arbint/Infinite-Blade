@@ -10,6 +10,7 @@
 UGA_GroundBlast::UGA_GroundBlast()
 {
 	ActivationOwnedTags.AddTag(UBAbilitySystemStatics::GetAimingStatTag());
+	BlockAbilitiesWithTag.AddTag(UBAbilitySystemStatics::GetBasicAttackAbilityTag());
 }
 
 void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)

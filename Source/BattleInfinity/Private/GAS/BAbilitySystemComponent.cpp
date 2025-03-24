@@ -9,6 +9,9 @@ UBAbilitySystemComponent::UBAbilitySystemComponent()
 {
 	GetGameplayAttributeValueChangeDelegate(UBAttributeSet::GetHealthAttribute())
 		.AddUObject(this, &UBAbilitySystemComponent::HealthUpdated);
+
+	GenericConfirmInputID = (int32)EBAbilityInputID::Confirm;
+	GenericCancelInputID = (int32)EBAbilityInputID::Cancel;
 }
 
 void UBAbilitySystemComponent::ApplyInitialEffects()

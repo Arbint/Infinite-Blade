@@ -31,3 +31,8 @@ FGameplayTag UBAbilitySystemStatics::GetAimingStatTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.aiming");
 }
+
+FGameplayTag UBAbilitySystemStatics::GetBasicAttackAbilityTag()
+{
+	return FGameplayTag::RequestGameplayTag("ability.basicattack");
+}
