@@ -127,7 +127,6 @@ void ABCharacter::StunTagUpdated(const FGameplayTag Tag, int32 NewCount)
 {
 	if (IsDead())
 		return;
-
 	if (NewCount != 0)
 	{
 		PlayAnimMontage(StunMontage);
