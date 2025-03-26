@@ -65,7 +65,6 @@ void UGA_GroundBlast::TargetReceived(const FGameplayAbilityTargetDataHandle& Tar
 	CueParams.Location = CenterHitResult.ImpactPoint;
 	CueParams.RawMagnitude = TargetingAreaRadius;
 	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(BlastVFXGameplayCueTag, CueParams);
-
 	K2_EndAbility();
 }
 
