@@ -56,7 +56,13 @@ void ATA_GroundPick::ConfirmTargetingAndContinue()
 
 		TargetActors.Add(OverlapResult.GetActor());
 	}
-	TargetDataReadyDelegate.Broadcast(UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(TargetActors.Array(), false));
+	FGameplayAbilityTargetDataHandle TargetDataHandle = UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(TargetActors.Array(), false);
+	
+	FGameplayAbilityTargetData_SingleTargetHit* TargetCenter = new FGameplayAbilityTargetData_SingleTargetHit;
+	TargetCenter->HitResult.ImpactPoint = GetActorLocation();
+	TargetDataHandle.Add(TargetCenter);
+
+	TargetDataReadyDelegate.Broadcast(TargetDataHandle);
 }
 
 void ATA_GroundPick::SetTargetingAreaRadius(float NewRadius)

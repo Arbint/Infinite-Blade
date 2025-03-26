@@ -5,6 +5,7 @@
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitTargetData.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "GAS/BAbilitySystemStatics.h"
 #include "GAS/TA_GroundPick.h"
 
@@ -51,6 +52,14 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 void UGA_GroundBlast::TargetReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle)
 {
 	BP_ApplyGameplayEffectToTarget(TargetDataHandle, DamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
+
+	FHitResult CenterHitResult = UAbilitySystemBlueprintLibrary::GetHitResultFromTargetData(TargetDataHandle, 1);
+	
+	FGameplayCueParameters CueParams;
+	CueParams.Location = CenterHitResult.ImpactPoint;
+	CueParams.RawMagnitude = TargetingAreaRadius;
+	GetAbilitySystemComponentFromActorInfo()->ExecuteGameplayCue(BlastVFXGameplayCueTag, CueParams);
+
 	K2_EndAbility();
 }
 

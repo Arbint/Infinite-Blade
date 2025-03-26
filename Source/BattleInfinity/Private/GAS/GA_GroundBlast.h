@@ -17,6 +17,9 @@ public:
 	UGA_GroundBlast();
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "GameplayCue", meta=(Categories="GameplayCue"))
+	FGameplayTag BlastVFXGameplayCueTag;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* CastMontage;
 
