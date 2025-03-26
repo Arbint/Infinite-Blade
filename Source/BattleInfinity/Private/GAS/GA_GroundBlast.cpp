@@ -37,6 +37,14 @@ void UGA_GroundBlast::ActivateAbility(const FGameplayAbilitySpecHandle Handle, c
 
 	AGameplayAbilityTargetActor* TargetActor = nullptr;
 	WaitTargetData->BeginSpawningActor(this, GroundPickTargetActorClass, TargetActor);
+
+	ATA_GroundPick* GroundPickTargetActor = Cast<ATA_GroundPick>(TargetActor);
+	if (GroundPickTargetActor)
+	{
+		GroundPickTargetActor->SetTargetingDistance(TargetingMaxDistance);
+		GroundPickTargetActor->SetTargetingAreaRadius(TargetingAreaRadius);
+	}
+
 	WaitTargetData->FinishSpawningActor(this, TargetActor);
 }
 

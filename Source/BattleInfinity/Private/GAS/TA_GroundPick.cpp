@@ -3,6 +3,7 @@
 
 #include "GAS/TA_GroundPick.h"
 #include "Abilities/GameplayAbility.h"
+#include "Components/DecalComponent.h"
 #include "Engine/OverlapResult.h"
 #include "GenericTeamAgentInterface.h"
 #include "TA_GroundPick.h"
@@ -11,6 +12,11 @@
 ATA_GroundPick::ATA_GroundPick()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	SetRootComponent(CreateDefaultSubobject<USceneComponent>("Root Component"));
+
+	DecalComponent = CreateDefaultSubobject<UDecalComponent>("Decal Component");
+	DecalComponent->SetupAttachment(GetRootComponent());
 }
 
 void ATA_GroundPick::Tick(float DeltaSeconds)
@@ -51,6 +57,15 @@ void ATA_GroundPick::ConfirmTargetingAndContinue()
 		TargetActors.Add(OverlapResult.GetActor());
 	}
 	TargetDataReadyDelegate.Broadcast(UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActorArray(TargetActors.Array(), false));
+}
+
+void ATA_GroundPick::SetTargetingAreaRadius(float NewRadius)
+{
+	TargetAreaRadius = NewRadius;
+	if (DecalComponent)
+	{
+		DecalComponent->DecalSize = FVector{NewRadius};
+	}
 }
 
 FVector ATA_GroundPick::GetTargetingAimLoc() const

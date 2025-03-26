@@ -21,6 +21,12 @@ private:
 	UAnimMontage* CastMontage;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	float TargetingMaxDistance = 2000.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	float TargetingAreaRadius = 300.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	TSubclassOf<class ATA_GroundPick> GroundPickTargetActorClass;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")

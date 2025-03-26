@@ -17,8 +17,13 @@ public:
 	ATA_GroundPick();
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void ConfirmTargetingAndContinue() override;
+	FORCEINLINE void SetTargetingDistance(float NewDistance) { TargetMaxDistance = NewDistance; }
+	void SetTargetingAreaRadius(float NewRadius);
 
 private:
+	UPROPERTY(VisibleDefaultsOnly, Category = "Visual")
+	class UDecalComponent* DecalComponent;
+
 	FVector GetTargetingAimLoc() const;
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	bool bDetectEnemy = true;
