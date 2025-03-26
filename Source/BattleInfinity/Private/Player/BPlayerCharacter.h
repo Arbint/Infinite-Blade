@@ -22,6 +22,9 @@ private:
 	virtual void OnDead() override;
 	virtual void OnRespawn() override;
 
+	virtual void OnStun() override;
+	virtual void OnRecoverFromStun() override;
+
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	class UCameraComponent* ViewCam;
 

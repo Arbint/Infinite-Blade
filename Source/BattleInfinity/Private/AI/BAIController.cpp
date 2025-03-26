@@ -52,6 +52,9 @@ void ABAIController::OnPossess(APawn* NewPawn)
 	{
 		PawnASC->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetDeathStatTag())
 			.AddUObject(this, &ABAIController::PawnDeadTagUpdated);
+
+		PawnASC->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetStunStatTag())
+			.AddUObject(this, &ABAIController::PawnStunTagUpdated);
 	}
 }
 
@@ -137,11 +140,14 @@ void ABAIController::ForgetTargetImmediately(AActor* TargetToForget)
 	}
 }
 
-void ABAIController::PawnDeadTagUpdated(const FGameplayTag GameplayTag, int32 NewCount)
+void ABAIController::PawnStunTagUpdated(const FGameplayTag GameplayTag, int32 NewCount)
 {
+	if (bIsPawnDead)
+		return;
+
 	if (NewCount != 0)
 	{
-		GetBrainComponent()->StopLogic("Dead");
+		GetBrainComponent()->StopLogic("Stuned");
 		AIPerceptionComponent->AgeStimuli(TNumericLimits<float>::Max());
 		SetAllSensesEnabled(false);
 		SetCurrentTarget(nullptr);
@@ -150,6 +156,24 @@ void ABAIController::PawnDeadTagUpdated(const FGameplayTag GameplayTag, int32 Ne
 	{
 		SetAllSensesEnabled(true);
 		GetBrainComponent()->StartLogic();
+	}
+}
+
+void ABAIController::PawnDeadTagUpdated(const FGameplayTag GameplayTag, int32 NewCount)
+{
+	if (NewCount != 0)
+	{
+		GetBrainComponent()->StopLogic("Dead");
+		AIPerceptionComponent->AgeStimuli(TNumericLimits<float>::Max());
+		SetAllSensesEnabled(false);
+		SetCurrentTarget(nullptr);
+		bIsPawnDead = true;
+	}
+	else
+	{
+		SetAllSensesEnabled(true);
+		GetBrainComponent()->StartLogic();
+		bIsPawnDead = false;
 	}
 }
 

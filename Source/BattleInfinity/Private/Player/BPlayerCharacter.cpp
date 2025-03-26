@@ -68,6 +68,18 @@ void ABPlayerCharacter::OnRespawn()
 		EnableInput(OwningPlayerController);
 }
 
+void ABPlayerCharacter::OnStun()
+{
+	if(APlayerController* OwningPlayerController = GetController<APlayerController>())
+		DisableInput(OwningPlayerController);
+}
+
+void ABPlayerCharacter::OnRecoverFromStun()
+{
+	if(APlayerController* OwningPlayerController = GetController<APlayerController>())
+		EnableInput(OwningPlayerController);
+}
+
 void ABPlayerCharacter::HandleLookInput(const FInputActionValue& InputActionValue)
 {
 	FVector2D InputValue = InputActionValue.Get<FVector2D>();

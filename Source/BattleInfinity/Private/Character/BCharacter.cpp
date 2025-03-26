@@ -110,9 +110,42 @@ void ABCharacter::BindAbilitySystemDelegates()
 		BAbilitySystemComponent->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetDeathStatTag())
 			.AddUObject(this, &ABCharacter::DeadTagUpdated);
 
+		BAbilitySystemComponent->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetStunStatTag())
+			.AddUObject(this, &ABCharacter::StunTagUpdated);
+
 		BAbilitySystemComponent->RegisterGameplayTagEvent(UBAbilitySystemStatics::GetAimingStatTag())
 			.AddUObject(this, &ABCharacter::AimTagUpdated);
 	}
+}
+
+bool ABCharacter::IsDead() const
+{
+	return BAbilitySystemComponent && BAbilitySystemComponent->HasMatchingGameplayTag(UBAbilitySystemStatics::GetDeathStatTag());
+}
+
+void ABCharacter::StunTagUpdated(const FGameplayTag Tag, int32 NewCount)
+{
+	if (IsDead())
+		return;
+
+	if (NewCount != 0)
+	{
+		PlayAnimMontage(StunMontage);
+		OnStun();
+	}
+	else
+	{
+		StopAnimMontage(StunMontage);
+		OnRecoverFromStun();
+	}
+}
+
+void ABCharacter::OnStun()
+{
+}
+
+void ABCharacter::OnRecoverFromStun()
+{
 }
 
 void ABCharacter::DeadTagUpdated(const FGameplayTag Tag, int32 NewCount)

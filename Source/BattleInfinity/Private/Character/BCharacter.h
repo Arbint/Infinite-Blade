@@ -56,8 +56,21 @@ private:
 
 	void ConfigureOverheadWidget();
 	/************************************************/
+	/*                   Stun                       */
+	/************************************************/
+private:
+	void StunTagUpdated(const FGameplayTag Tag, int32 NewCount);
+	virtual void OnStun();
+	virtual void OnRecoverFromStun();
+	UPROPERTY(EditDefaultsOnly, Category = "Stun")
+	UAnimMontage* StunMontage;
+
+	/************************************************/
 	/*             Death and Respawn                */
 	/************************************************/
+public:
+	bool IsDead() const;
+
 private:
 	void DeadTagUpdated(const FGameplayTag Tag, int32 NewCount);
 

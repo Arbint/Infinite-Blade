@@ -7,6 +7,11 @@ FGameplayTag UBAbilitySystemStatics::GetDeathStatTag()
 	return FGameplayTag::RequestGameplayTag("stat.dead");
 }
 
+FGameplayTag UBAbilitySystemStatics::GetStunStatTag()
+{
+	return FGameplayTag::RequestGameplayTag("stat.stun");
+}
+
 FGameplayTag UBAbilitySystemStatics::GetHealthFullTag()
 {
 	return FGameplayTag::RequestGameplayTag("stat.healthFull");

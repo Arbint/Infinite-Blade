@@ -16,6 +16,7 @@ class UBAbilitySystemStatics : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:	
 	static FGameplayTag GetDeathStatTag();
+	static FGameplayTag GetStunStatTag();
 	static FGameplayTag GetHealthFullTag();
 	static FGameplayTag GetHealthEmptyTag();
 	static FGameplayTag GetManaFullTag();

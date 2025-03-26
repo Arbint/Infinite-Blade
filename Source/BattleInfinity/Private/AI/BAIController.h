@@ -51,6 +51,9 @@ private:
 	void ForgetTargetImmediately(AActor* TargetToForget);
 
 	void PawnDeadTagUpdated(const FGameplayTag GameplayTag, int32 NewCount);
+	void PawnStunTagUpdated(const FGameplayTag GameplayTag, int32 NewCount);
 
 	void SetAllSensesEnabled(bool bSensesEnabled);
+
+	bool bIsPawnDead;
 };
