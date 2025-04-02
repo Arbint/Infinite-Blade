@@ -15,7 +15,12 @@ class UBGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 public:			
 	UBGameplayAbility();
+	FORCEINLINE UTexture2D* GetAbilityIcon() const { return AbilityIcon; }
 
 protected:
 	UAnimInstance* GetOwnerAnimInstance() const;
+
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Visual")
+	UTexture2D* AbilityIcon;
 };
