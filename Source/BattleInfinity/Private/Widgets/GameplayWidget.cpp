@@ -5,7 +5,9 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Widgets/ValueGauge.h"
+#include "Widgets/AbilityListView.h"
 #include "GAS/BAttributeSet.h"
+
 
 void UGameplayWidget::NativeConstruct()
 {
@@ -24,4 +26,9 @@ void UGameplayWidget::NativeConstruct()
 			UBAttributeSet::GetManaAttribute(),
 			UBAttributeSet::GetMaxManaAttribute());
 	}
+}
+
+void UGameplayWidget::ConfigureWithAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AblityClasses)
+{
+	AbilityListView->ConfigureWithAbilities(AblityClasses);
 }

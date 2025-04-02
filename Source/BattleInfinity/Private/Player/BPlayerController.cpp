@@ -2,9 +2,10 @@
 
 
 #include "Player/BPlayerController.h"
+#include "Abilities/GameplayAbility.h"
+#include "Net/UnrealNetwork.h"
 #include "Player/BPlayerCharacter.h"
 #include "Widgets/GameplayWidget.h"
-#include "Net/UnrealNetwork.h"
 
 
 void ABPlayerController::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -57,5 +58,6 @@ void ABPlayerController::CreateGameplayWidget()
 	if (GameplayWidget)
 	{
 		GameplayWidget->AddToViewport();
+		GameplayWidget->ConfigureWithAbilities(BPlayerCharacter->GetAbilities());
 	}
 }

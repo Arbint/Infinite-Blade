@@ -15,7 +15,11 @@ class UGameplayWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	virtual void NativeConstruct() override;
+	void ConfigureWithAbilities(const TArray<TSubclassOf<class UGameplayAbility>>& AblityClasses);
 private:	
+	UPROPERTY(meta=(BindWidget))
+	class UAbilityListView* AbilityListView;
+
 	UPROPERTY(meta=(BindWidget))
 	class UValueGauge* HealthBar;
 

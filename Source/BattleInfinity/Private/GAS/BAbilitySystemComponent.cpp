@@ -42,6 +42,17 @@ void UBAbilitySystemComponent::GrantInitialAbilities()
 	}
 }
 
+TArray<TSubclassOf<UGameplayAbility>> UBAbilitySystemComponent::GetAbilities() const
+{
+	TArray<TSubclassOf<UGameplayAbility>> RetAbilities;
+	for (const auto& AbilityPair : Abilities)
+	{
+		RetAbilities.Add(AbilityPair.Value);
+	}
+
+	return RetAbilities;
+}
+
 void UBAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
 	if (!GetOwner() || !GetOwner()->HasAuthority())

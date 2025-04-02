@@ -39,6 +39,7 @@ public:
 	/************************************************/
 public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	TArray<TSubclassOf<class UGameplayAbility>> GetAbilities() const;
 private:
 	void BindAbilitySystemDelegates();
 

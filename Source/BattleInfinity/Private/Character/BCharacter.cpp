@@ -103,6 +103,11 @@ UAbilitySystemComponent* ABCharacter::GetAbilitySystemComponent() const
 	return BAbilitySystemComponent;
 }
 
+TArray<TSubclassOf<class UGameplayAbility>> ABCharacter::GetAbilities() const
+{
+	return BAbilitySystemComponent->GetAbilities();
+}
+
 void ABCharacter::BindAbilitySystemDelegates()
 {
 	if (BAbilitySystemComponent)

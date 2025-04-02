@@ -18,6 +18,7 @@ public:
 	UBAbilitySystemComponent();
 	void ApplyInitialEffects();
 	void GrantInitialAbilities();
+	TArray<TSubclassOf<UGameplayAbility>> GetAbilities() const;
 	
 private:	
 	UPROPERTY(EditDefaultsOnly, Category = "GameplayEffects")
