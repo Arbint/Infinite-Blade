@@ -12,7 +12,7 @@ void UMainMenuWidget::NativeConstruct()
 	BGameInstance = GetGameInstance<UBGameInstance>();
 	if (BGameInstance)
 	{
-			
+		BGameInstance->OnLoginCompleted.BindUObject(this, &UMainMenuWidget::LoginCompleted);
 	}
 	
 	LoginButton->OnClicked.AddDynamic(this, &UMainMenuWidget::LoginButtonClicked);
@@ -21,4 +21,12 @@ void UMainMenuWidget::NativeConstruct()
 void UMainMenuWidget::LoginButtonClicked()
 {
 	BGameInstance->ClientLogin();
+}
+
+void UMainMenuWidget::LoginCompleted(bool bWasSuccessful, const FString& PlayerName, const FString& Error)
+{
+	if (bWasSuccessful)
+	{
+		UserNameText->SetText(FText::FromString(PlayerName));
+	}
 }

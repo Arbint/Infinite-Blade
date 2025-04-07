@@ -27,4 +27,7 @@ private:
 
 	UFUNCTION()
 	void LoginButtonClicked();
+
+	void LoginCompleted(bool bWasSuccessful, const FString& PlayerName, const FString& Error);
 };
+
