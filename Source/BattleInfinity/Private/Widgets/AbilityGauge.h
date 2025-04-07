@@ -16,6 +16,7 @@ class UAbilityGauge : public UUserWidget, public IUserObjectListEntry
 	GENERATED_BODY()
 public:
 	virtual void NativeOnListItemObjectSet(UObject* ListItemObject) override;
+	virtual void NativeConstruct() override;
 private:	
 	UPROPERTY(meta=(BindWidget))
 	class UImage* Icon;
@@ -28,4 +29,6 @@ private:
 
 	UPROPERTY(meta=(BindWidget))
 	class UTextBlock* CooldownTimeCounter;
+
+	void AbilityCommited(class UGameplayAbility* Ability);
 };
