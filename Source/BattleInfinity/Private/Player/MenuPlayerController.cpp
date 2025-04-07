@@ -15,4 +15,7 @@ void AMenuPlayerController::AcknowledgePossession(APawn* NewPawn)
 			MenuWidget->AddToViewport();
 		}
 	}
+
+	SetInputMode(FInputModeUIOnly());
+	SetShowMouseCursor(true);
 }
