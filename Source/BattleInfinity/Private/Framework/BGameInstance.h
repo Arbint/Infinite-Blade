@@ -15,8 +15,29 @@ class UBGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 public:	
+	virtual void Init() override;
+	/***********************************/
+	/*            Client               */
+	/***********************************/
+public:
 	FOnLoginCompleted OnLoginCompleted;
 	void ClientLogin();
-
+private:
 	void LoginCompleted(int32 PlayerNum, bool bWasSuccessful, const FUniqueNetId& NetId, const FString& Error);
+
+	/***********************************/
+	/*            Server               */
+	/***********************************/
+private:	
+	void CreateSession();
+
+	FString GetSessionName() const;
+	FName GetSesionNameKey() const;
+
+	void SessionCreated(FName SessionName, bool bWasSuccessfull);
+
+	void LoadLevelAndListen(const TSoftObjectPtr<UWorld>& LevelToLoad);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Level")
+	TSoftObjectPtr<UWorld> MatchLevel;
 };
