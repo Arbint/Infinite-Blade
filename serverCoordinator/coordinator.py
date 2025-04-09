@@ -1,8 +1,31 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import subprocess
 
 class UnrealServerRequestHandler(BaseHTTPRequestHandler):
+    nextAvaliablePort = 7777
     def do_POST(self):
         print("handling request!!!")
+        port = UnrealServerRequestHandler.nextAvaliablePort
+        UnrealServerRequestHandler.nextAvaliablePort+=1
+
+        sessionName = self.headers.get("SESSION_NAME")
+        sessionUniqueId = self.headers.get("SESSION_UNIQUE_ID")
+        self.LaunchSessionServer(sessionName, sessionUniqueId, port)
+        self.send_response(200)
+        self.send_header("PORT", port)
+        self.end_headers()
+        self.wfile.write(b"POST Received")
+
+    
+    def LaunchSessionServer(self, serverName, serverId, port):
+        print(f"launching server with name: {serverName}, id: {serverId}, port: {port}")
+        # "C:/JT/UnrealSrc/UnrealEngine/Engine/Binaries/Win64/UnrealEditor.exe" %~dp0../BattleInfinity.uproject -server -log -epicapp="Server" -SESSION_UNIQUE_ID "TestUniqueIDValuesdfsdfsdfsdfsd"
+        EngineExcutable = "C:/JT/UnrealSrc/UnrealEngine/Engine/Binaries/Win64/UnrealEditor.exe"
+        ProjectPath = "C:/JT/BattleInfinity/BattleInfinity.uproject"
+
+        subprocess.Popen([EngineExcutable, ProjectPath, "-server", "-log", "-epicapp=" "Server", "-SESSION_NAME", serverName, "-SESSION_UNIQUE_ID", serverId])
+
+
 
 
 class UnrealSessionCoordinator:
