@@ -9,8 +9,10 @@
 void UBGameInstance::Init()
 {
 	Super::Init();
+	UE_LOG(LogTemp, Warning, TEXT("Init Called"))
 	if (GetWorld()->GetNetMode() == ENetMode::NM_DedicatedServer)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Trying to Create Session"))
 		CreateSession();
 	}
 }
@@ -55,6 +57,8 @@ void UBGameInstance::LoginCompleted(int32 PlayerNum, bool bWasSuccessful, const 
 
 void UBGameInstance::CreateSession()
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("Creating Session"))
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
 	if (!OnlineSubsystem)
 	{
@@ -76,10 +80,12 @@ void UBGameInstance::CreateSession()
 	OnlineSessionSettings.NumPublicConnections = 10;
 
 	OnlineSessionSettings.Set(GetSesionNameKey(), GetSessionName(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
+	OnlineSessionSettings.Set(GetSesionUniqueIDKey(), GetSessionUniqueID(), EOnlineDataAdvertisementType::ViaOnlineServiceAndPing);
 	SessionPtr->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	SessionPtr->OnCreateSessionCompleteDelegates.AddUObject(this, &UBGameInstance::SessionCreated);
-	if (SessionPtr->CreateSession(0, FName(GetSessionName()), OnlineSessionSettings))
+	if (!SessionPtr->CreateSession(0, FName(GetSessionName()), OnlineSessionSettings))
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Cannot Create Session..."))
 		SessionPtr->OnCreateSessionCompleteDelegates.RemoveAll(this);
 	}
 }
@@ -94,8 +100,22 @@ FName UBGameInstance::GetSesionNameKey() const
 	return FName("SESSION_NAME");
 }
 
+FString UBGameInstance::GetSessionUniqueID() const
+{
+	FString UniqueId = "";
+	FParse::Value(FCommandLine::Get(), *GetSesionUniqueIDKey().ToString(), UniqueId);
+	UE_LOG(LogTemp, Warning, TEXT("Found Unique Id: %s"),*(UniqueId));
+	return UniqueId;
+}
+
+FName UBGameInstance::GetSesionUniqueIDKey() const
+{
+	return FName("SESSION_UNIQUE_ID");
+}
+
 void UBGameInstance::SessionCreated(FName SessionName, bool bWasSuccessfull)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Create Session Callback reached"))
 	if (bWasSuccessfull)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Create Session Successful"));

@@ -1,0 +1,1 @@
+"C:/JT/UnrealSrc/UnrealEngine/Engine/Binaries/Win64/UnrealEditor.exe" %~dp0../BattleInfinity.uproject -server -log -epicapp="Server" -SESSION_UNIQUE_ID "TestUniqueIDValuesdfsdfsdfsdfsd"

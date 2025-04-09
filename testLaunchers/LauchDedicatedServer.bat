@@ -1,1 +1,0 @@
-"D:\UE_5.5\Engine\Binaries\Win64\UnrealEditor.exe" %~dp0../BattleInfinity.uproject -server -log -epicapp="Server"

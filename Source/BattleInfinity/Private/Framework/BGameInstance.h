@@ -34,6 +34,9 @@ private:
 	FString GetSessionName() const;
 	FName GetSesionNameKey() const;
 
+	FString GetSessionUniqueID() const;
+	FName GetSesionUniqueIDKey() const;
+
 	void SessionCreated(FName SessionName, bool bWasSuccessfull);
 
 	void LoadLevelAndListen(const TSoftObjectPtr<UWorld>& LevelToLoad);
