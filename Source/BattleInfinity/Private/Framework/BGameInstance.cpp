@@ -3,6 +3,7 @@
 #include "Framework/BGameInstance.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
+#include "HttpModule.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Interfaces/OnlineSessionInterface.h"
 
@@ -32,6 +33,23 @@ void UBGameInstance::ClientLogin()
 	}
 }
 
+void UBGameInstance::RequestCreateSession(const FName& NewSessionName)
+{
+	FGuid NewSesionUniqueId = FGuid::NewGuid(); 
+	FHttpRequestRef Request = FHttpModule::Get().CreateRequest();
+	
+	FString CoordinatorURLStr = GetCoordinatorURLStr();
+	FString RequestURL = FString::Printf(TEXT("%s/StartServer"), *(CoordinatorURLStr));
+	Request->SetURL(RequestURL);
+	Request->SetVerb("POST");
+
+	Request->SetHeader(GetSesionUniqueIDKey().ToString(), NewSesionUniqueId.ToString());
+	Request->SetHeader(GetSesionNameKey().ToString(), NewSessionName.ToString());
+
+	Request->OnProcessRequestComplete().BindUObject(this, &UBGameInstance::SessionCreationRequestCompleted, NewSesionUniqueId);
+	Request->ProcessRequest();
+}
+
 void UBGameInstance::LoginCompleted(int32 PlayerNum, bool bWasSuccessful, const FUniqueNetId& NetId, const FString& Error)
 {
 	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
@@ -53,6 +71,34 @@ void UBGameInstance::LoginCompleted(int32 PlayerNum, bool bWasSuccessful, const 
 	}
 
 	IdentityPtr->OnLoginCompleteDelegates->RemoveAll(this);
+}
+
+FString UBGameInstance::GetCoordinatorURLStr()
+{
+	FString CoordiantorURL = "";
+	FParse::Value(FCommandLine::Get(), *GetCoordinatorURLStrKey().ToString(), CoordiantorURL);
+	UE_LOG(LogTemp, Warning, TEXT("Found Coordinator URL: %s"),*(CoordiantorURL));
+	if (CoordiantorURL == "")
+		return "127.0.0.1";
+
+	return CoordiantorURL;
+}
+
+FName UBGameInstance::GetCoordinatorURLStrKey()
+{
+	return FName("COORDINATOR_URL");
+}
+
+void UBGameInstance::SessionCreationRequestCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bProcessdSuccessfully, FGuid SessionUniqueId)
+{
+	if (bProcessdSuccessfully)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Session Created Successfully"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Session did not got created..."));
+	}
 }
 
 void UBGameInstance::CreateSession()

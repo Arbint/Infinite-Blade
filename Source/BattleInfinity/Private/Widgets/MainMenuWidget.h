@@ -20,13 +20,22 @@ private:
 	class UButton* LoginButton;
 
 	UPROPERTY(meta=(BindWidget))
+	class UButton* CreateSessionBtn;
+
+	UPROPERTY(meta=(BindWidget))
 	class UTextBlock* UserNameText;
+
+	UPROPERTY(meta=(BindWidget))
+	class UEditableText* SessionNameText;
 
 	UPROPERTY()
 	class UBGameInstance* BGameInstance;
 
 	UFUNCTION()
 	void LoginButtonClicked();
+
+	UFUNCTION()
+	void CreateSesionButtonClicked();
 
 	void LoginCompleted(bool bWasSuccessful, const FString& PlayerName, const FString& Error);
 };
