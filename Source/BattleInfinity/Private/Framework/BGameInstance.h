@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "Interfaces/IHttpRequest.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "BGameInstance.generated.h"
 
 DECLARE_DELEGATE_ThreeParams(FOnLoginCompleted, bool/*bWasSuccessful*/, const FString& /*UserName*/, const FString& /*ErrorMsg*/);
@@ -30,6 +31,24 @@ private:
 	FName GetCoordinatorURLStrKey();
 	void SessionCreationRequestCompleted(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bProcessdSuccessfully, FGuid SessionUniqueId);
 
+	void StartFindCreatedSession(const FGuid& SessionUniqueId, int Port);
+	void StopFindingCreatedSession();
+	void FindCreatedSession(FGuid SessionUniqueId, int Port);
+	void FindCreatedSessionMaxTimeReached();
+	void FindCreatedSessionCompleted(bool bWasSuccessful, int Port);
+
+	TSharedPtr<FOnlineSessionSearch> OnlineSessionSearch;
+	
+	FTimerHandle FindCreatedSesionTimerHandle;
+	FTimerHandle FindCreatedSesionTimeoutTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Session Search")
+	float FindCreatedSessionInterval = 1.f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Session Search")
+	float FindCreatedSessionSearchMaxTime = 30.f;
+
+	IOnlineSessionPtr GetOnlineSesionPtr() const;
 	/***********************************/
 	/*            Server               */
 	/***********************************/

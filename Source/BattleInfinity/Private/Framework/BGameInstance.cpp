@@ -6,6 +6,7 @@
 #include "HttpModule.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Interfaces/OnlineSessionInterface.h"
+#include "Interfaces/IHttpResponse.h"
 
 void UBGameInstance::Init()
 {
@@ -94,11 +95,92 @@ void UBGameInstance::SessionCreationRequestCompleted(FHttpRequestPtr Request, FH
 	if (bProcessdSuccessfully)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Session Created Successfully"));
+		FString PortStr = Response->GetHeader("PORT");
+		int Port = FCString::Atoi(*PortStr);
+		StartFindCreatedSession(SessionUniqueId, Port);
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Session did not got created..."));
 	}
+}
+
+void UBGameInstance::StartFindCreatedSession(const FGuid& SessionUniqueId, int Port)
+{
+	StopFindingCreatedSession();
+	GetWorld()->GetTimerManager().SetTimer(FindCreatedSesionTimerHandle, 
+		FTimerDelegate::CreateUObject(this, &UBGameInstance::FindCreatedSession, SessionUniqueId, Port),
+		FindCreatedSessionInterval, true	
+	); // tring to find the created session peoridically
+
+	GetWorld()->GetTimerManager().SetTimer(FindCreatedSesionTimeoutTimerHandle,
+		this, &UBGameInstance::FindCreatedSessionMaxTimeReached,
+		FindCreatedSessionSearchMaxTime
+	); // stop the search if max time has reached.
+}
+
+void UBGameInstance::StopFindingCreatedSession()
+{
+	GetWorld()->GetTimerManager().ClearTimer(FindCreatedSesionTimerHandle);
+	GetWorld()->GetTimerManager().ClearTimer(FindCreatedSesionTimeoutTimerHandle);
+	IOnlineSessionPtr OnlineSessionPtr = GetOnlineSesionPtr();
+	if (OnlineSessionPtr)
+	{
+		OnlineSessionPtr->OnFindSessionsCompleteDelegates.RemoveAll(this);
+	}
+}
+
+void UBGameInstance::FindCreatedSession(FGuid SessionUniqueId, int Port)
+{
+	// always do dynamic allocation in it's own line.
+	FOnlineSessionSearch* NewSessionSearch = new FOnlineSessionSearch;
+	OnlineSessionSearch = MakeShareable(NewSessionSearch);
+
+	if (OnlineSessionSearch)
+	{
+		OnlineSessionSearch->bIsLanQuery = false;
+		OnlineSessionSearch->MaxSearchResults = 100;
+		OnlineSessionSearch->QuerySettings.Set(GetSesionUniqueIDKey(), SessionUniqueId.ToString(), EOnlineComparisonOp::Equals);
+	}
+
+	IOnlineSessionPtr OnlineSessionPtr = GetOnlineSesionPtr();
+	if (OnlineSessionPtr)
+	{
+		OnlineSessionPtr->OnFindSessionsCompleteDelegates.RemoveAll(this);
+		OnlineSessionPtr->OnFindSessionsCompleteDelegates.AddUObject(this, &UBGameInstance::FindCreatedSessionCompleted, Port);
+		if (OnlineSessionPtr->FindSessions(0, OnlineSessionSearch.ToSharedRef()))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Find Created Session failed when calling IOnlineSessionPtr::FindSessions"));
+			OnlineSessionPtr->OnFindSessionsCompleteDelegates.RemoveAll(this);
+		}
+	}
+}
+
+void UBGameInstance::FindCreatedSessionMaxTimeReached()
+{
+	StopFindingCreatedSession();
+	UE_LOG(LogTemp, Warning, TEXT("Can't find create session after %f seconds, abort"), FindCreatedSessionSearchMaxTime);
+}
+
+void UBGameInstance::FindCreatedSessionCompleted(bool bWasSuccessful, int Port)
+{
+	if (!bWasSuccessful || OnlineSessionSearch->SearchResults.Num() == 0)
+		return;
+
+	StopFindingCreatedSession();
+
+	FOnlineSessionSearchResult OnlineSessionSearchResult = OnlineSessionSearch->SearchResults[0];
+	UE_LOG(LogTemp, Warning, TEXT("Found Created Session with id: %s"), *OnlineSessionSearchResult.GetSessionIdStr());
+}
+
+IOnlineSessionPtr UBGameInstance::GetOnlineSesionPtr() const
+{
+	IOnlineSubsystem* OnlineSubsystem = IOnlineSubsystem::Get();
+	if (!OnlineSubsystem)
+	{
+		return nullptr;
+	}
+	return OnlineSubsystem->GetSessionInterface();
 }
 
 void UBGameInstance::CreateSession()
