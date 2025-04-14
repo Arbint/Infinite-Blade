@@ -148,7 +148,7 @@ void UBGameInstance::FindCreatedSession(FGuid SessionUniqueId, int Port)
 	{
 		OnlineSessionPtr->OnFindSessionsCompleteDelegates.RemoveAll(this);
 		OnlineSessionPtr->OnFindSessionsCompleteDelegates.AddUObject(this, &UBGameInstance::FindCreatedSessionCompleted, Port);
-		if (OnlineSessionPtr->FindSessions(0, OnlineSessionSearch.ToSharedRef()))
+		if (!OnlineSessionPtr->FindSessions(0, OnlineSessionSearch.ToSharedRef()))
 		{
 			UE_LOG(LogTemp, Warning, TEXT("Find Created Session failed when calling IOnlineSessionPtr::FindSessions"));
 			OnlineSessionPtr->OnFindSessionsCompleteDelegates.RemoveAll(this);
