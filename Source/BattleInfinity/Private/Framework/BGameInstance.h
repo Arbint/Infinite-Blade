@@ -36,6 +36,7 @@ private:
 	void FindCreatedSession(FGuid SessionUniqueId, int Port);
 	void FindCreatedSessionMaxTimeReached();
 	void FindCreatedSessionCompleted(bool bWasSuccessful, int Port);
+	void JoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompletedResult, int Port);
 
 	TSharedPtr<FOnlineSessionSearch> OnlineSessionSearch;
 	

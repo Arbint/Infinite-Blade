@@ -171,6 +171,37 @@ void UBGameInstance::FindCreatedSessionCompleted(bool bWasSuccessful, int Port)
 
 	FOnlineSessionSearchResult OnlineSessionSearchResult = OnlineSessionSearch->SearchResults[0];
 	UE_LOG(LogTemp, Warning, TEXT("Found Created Session with id: %s"), *OnlineSessionSearchResult.GetSessionIdStr());
+	FString SessionName = "";
+	OnlineSessionSearchResult.Session.SessionSettings.Get<FString>(GetSesionNameKey(), SessionName);
+	IOnlineSessionPtr OnlineSessionPtr = GetOnlineSesionPtr();
+	if (OnlineSessionPtr)
+	{
+		OnlineSessionPtr->OnJoinSessionCompleteDelegates.RemoveAll(this);
+		OnlineSessionPtr->OnJoinSessionCompleteDelegates.AddUObject(this, &UBGameInstance::JoinSessionCompleted, Port);
+		if (!OnlineSessionPtr->JoinSession(0, FName{SessionName}, OnlineSessionSearchResult))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Can't joint session: %s"), *(SessionName));
+			OnlineSessionPtr->OnJoinSessionCompleteDelegates.RemoveAll(this);
+		}
+	}
+}
+
+void UBGameInstance::JoinSessionCompleted(FName SessionName, EOnJoinSessionCompleteResult::Type JoinSessionCompletedResult, int Port)
+{
+	IOnlineSessionPtr OnlineSessionPtr = GetOnlineSesionPtr();
+	if (!OnlineSessionPtr)
+		return;
+
+	OnlineSessionPtr->OnJoinSessionCompleteDelegates.RemoveAll(this);
+	if (JoinSessionCompletedResult == EOnJoinSessionCompleteResult::Success)
+	{
+		FString TravelURL = "";
+		OnlineSessionPtr->GetResolvedConnectString(SessionName, TravelURL);
+		FURL URL{ nullptr, *TravelURL, ETravelType::TRAVEL_Absolute};
+		URL.Port = Port;
+		UE_LOG(LogTemp, Warning, TEXT("Resoved Server Ip is: %s"), *(URL.ToString()));
+		GetFirstLocalPlayerController(GetWorld())->ClientTravel(URL.ToString(), ETravelType::TRAVEL_Absolute);
+	}
 }
 
 IOnlineSessionPtr UBGameInstance::GetOnlineSesionPtr() const
